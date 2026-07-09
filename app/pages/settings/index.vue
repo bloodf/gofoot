@@ -28,9 +28,14 @@
       <h2 class="text-xs font-semibold uppercase tracking-wide text-gray-500">
         {{ t('settings.session') }}
       </h2>
-      <NuxtLink to="/session" class="text-sm text-gofoot-primary underline">
+      <NuxtLink to="/session" class="tap-target flex items-center text-sm text-gofoot-primary">
         {{ t('settings.manageSession') }}
       </NuxtLink>
+      <NuxtLink to="/audit" class="tap-target flex items-center text-sm text-gofoot-primary">
+        {{ t('settings.audit') }}
+      </NuxtLink>
+      <NuxtLink to="/fantasy" class="tap-target flex items-center text-sm">Fantasy</NuxtLink>
+      <NuxtLink to="/club/finance" class="tap-target flex items-center text-sm">Finanças</NuxtLink>
     </section>
   </div>
 </template>

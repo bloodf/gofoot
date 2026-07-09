@@ -20,22 +20,25 @@
   },
   "hub": {
     "title": "Hub",
-    "subtitle": "Stage 0 — shell mobile-first. Partidas e economia chegam nos próximos ciclos.",
+    "subtitle": "Carregando save…",
     "saveNamePlaceholder": "Novo save",
     "nextMatch": "Próxima partida",
-    "nextMatchHint": "Fixture e rival em breve",
-    "form": "Forma",
-    "formHint": "Últimos resultados",
+    "nextMatchHint": "Fixture e rival",
+    "openMatch": "Abrir partida",
+    "form": "Tabela",
+    "formHint": "Classificação da divisão",
     "cash": "Caixa",
     "cashHint": "Economia server-side",
     "board": "Diretoria",
-    "boardHint": "Objetivos e pressão",
-    "trophies": "Troféus",
-    "trophiesHint": "Progressão da carreira",
+    "boardHint": "Confiança da cúpula",
+    "trophies": "Carreira",
+    "trophiesHint": "Escada de progressão",
     "inbox": "Caixa de entrada",
     "inboxHint": "Mensagens e ofertas",
     "news": "Notícias",
-    "newsHint": "Mundo do futebol"
+    "newsHint": "Mundo do futebol",
+    "fantasy": "Fantasy",
+    "fantasyHint": "Modo rápido"
   },
   "session": {
     "title": "Sessão",
@@ -55,16 +58,64 @@
   },
   "club": {
     "title": "Elenco",
-    "placeholder": "Lista de jogadores no próximo ciclo."
+    "placeholder": "Lista de jogadores"
   },
   "career": {
     "title": "Carreira",
-    "placeholder": "Escada Série D → Mundial em breve."
+    "placeholder": "Escada Série D → Mundial",
+    "season": "Temporada",
+    "now": "agora",
+    "currentHint": "Ganhe a divisão para subir a escada.",
+    "viewTable": "Ver classificação"
+  },
+  "match": {
+    "waiting": "Toque em Jogar para simular (server-side).",
+    "play": "Jogar partida (5 min)",
+    "pause": "Pausar",
+    "resume": "Retomar",
+    "live": "AO VIVO",
+    "paused": "Pausado",
+    "scheduled": "Agendada",
+    "ended": "Encerrada"
+  },
+  "leagues": {
+    "title": "Ligas",
+    "club": "Clube"
+  },
+  "fantasy": {
+    "title": "Fantasy",
+    "liveNow": "Ao vivo agora",
+    "play": "Entrar",
+    "soon": "Fantasy full sync no próximo ciclo de polish."
+  },
+  "finance": {
+    "title": "Finanças",
+    "tickets": "Ingressos",
+    "ticketPrice": "Preço",
+    "lastAttendance": "Último público",
+    "loan": "Empréstimos",
+    "takeLoan": "Contratar empréstimo",
+    "sponsors": "Patrocínios",
+    "negotiate": "Negociar marca (joke brand)",
+    "sponsorRejected": "Proposta recusada — tente outro valor.",
+    "stadium": "Estádio",
+    "ledger": "Extrato"
+  },
+  "inbox": {
+    "title": "Caixa de entrada",
+    "empty": "Sem mensagens"
+  },
+  "audit": {
+    "title": "Auditoria",
+    "intact": "Cadeia HMAC íntegra",
+    "broken": "Cadeia suspeita",
+    "entries": "entradas"
   },
   "settings": {
     "title": "Ajustes",
     "language": "Idioma",
     "session": "Sessão",
-    "manageSession": "Gerenciar token de sessão"
+    "manageSession": "Gerenciar token de sessão",
+    "audit": "Ver cadeia de auditoria"
   }
 }

@@ -1,0 +1,53 @@
+{
+  "version": "0.1.0",
+  "competitions": [
+    {
+      "id": "serie_d",
+      "name": "Campeonato Brasileiro Série D",
+      "country": "BR",
+      "tier": 4
+    },
+    {
+      "id": "serie_c",
+      "name": "Campeonato Brasileiro Série C",
+      "country": "BR",
+      "tier": 3
+    },
+    {
+      "id": "serie_b",
+      "name": "Campeonato Brasileiro Série B",
+      "country": "BR",
+      "tier": 2
+    },
+    {
+      "id": "serie_a",
+      "name": "Campeonato Brasileiro Série A",
+      "country": "BR",
+      "tier": 1
+    },
+    {
+      "id": "copa_do_brasil",
+      "name": "Copa do Brasil",
+      "country": "BR",
+      "tier": 0
+    },
+    {
+      "id": "libertadores",
+      "name": "CONMEBOL Libertadores",
+      "country": "SA",
+      "tier": 0
+    },
+    {
+      "id": "sudamericana",
+      "name": "CONMEBOL Sudamericana",
+      "country": "SA",
+      "tier": 0
+    },
+    {
+      "id": "club_world_cup",
+      "name": "FIFA Club World Cup",
+      "country": "WW",
+      "tier": 0
+    }
+  ]
+}

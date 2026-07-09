@@ -1,5 +1,5 @@
 import { createClient, type Client } from '@libsql/client'
-import { readFileSync, mkdirSync, existsSync } from 'node:fs'
+import { readFileSync, mkdirSync, existsSync, readdirSync } from 'node:fs'
 import { dirname, join } from 'node:path'
 import { fileURLToPath } from 'node:url'
 
@@ -9,7 +9,6 @@ let migrated = false
 function resolveUrl(url: string): string {
   if (url.startsWith('file:')) {
     const pathPart = url.slice('file:'.length)
-    // Ensure parent dir exists for local files
     const abs = pathPart.startsWith('/')
       ? pathPart
       : join(process.cwd(), pathPart.replace(/^\.\//, ''))
@@ -37,59 +36,86 @@ export function getDb(): Client {
   return client
 }
 
+function migrationDirs(): string[] {
+  const here = dirname(fileURLToPath(import.meta.url))
+  return [
+    join(process.cwd(), 'server/db/migrations'),
+    join(here, '../db/migrations'),
+  ]
+}
+
+function loadMigrationFiles(): Array<{ id: string; sql: string }> {
+  for (const dir of migrationDirs()) {
+    if (!existsSync(dir)) continue
+    const files = readdirSync(dir)
+      .filter((f) => f.endsWith('.sql'))
+      .sort()
+    if (!files.length) continue
+    return files.map((f) => ({
+      id: f.replace(/\.sql$/, ''),
+      sql: readFileSync(join(dir, f), 'utf8'),
+    }))
+  }
+  return []
+}
+
+function splitSql(sql: string): string[] {
+  return sql
+    .split(';')
+    .map((s) =>
+      s
+        .split('\n')
+        .filter((line) => !line.trim().startsWith('--'))
+        .join('\n')
+        .trim(),
+    )
+    .filter((s) => s.length > 0)
+}
+
 export async function ensureMigrated(): Promise<void> {
   if (migrated) return
   const db = getDb()
 
-  // Prefer reading migration file; fall back to inline SQL for bundled deploys
-  let sql: string
-  try {
-    const here = dirname(fileURLToPath(import.meta.url))
-    const candidates = [
-      join(process.cwd(), 'server/db/migrations/0001_init.sql'),
-      join(here, '../db/migrations/0001_init.sql'),
-    ]
-    const path = candidates.find((p) => existsSync(p))
-    if (!path) throw new Error('migration file not found')
-    sql = readFileSync(path, 'utf8')
-  } catch {
-    sql = `
+  await db.execute(`
+    CREATE TABLE IF NOT EXISTS schema_migrations (
+      id TEXT PRIMARY KEY NOT NULL,
+      applied_at INTEGER NOT NULL
+    )
+  `)
+
+  const applied = await db.execute(`SELECT id FROM schema_migrations`)
+  const done = new Set(applied.rows.map((r) => String(r.id)))
+
+  const files = loadMigrationFiles()
+  if (!files.length) {
+    // Minimal fallback
+    const fallback = `
 CREATE TABLE IF NOT EXISTS sessions (
   id TEXT PRIMARY KEY NOT NULL,
   token_hash TEXT NOT NULL UNIQUE,
   created_at INTEGER NOT NULL,
   last_seen_at INTEGER NOT NULL
 );
-CREATE INDEX IF NOT EXISTS idx_sessions_token_hash ON sessions (token_hash);
-CREATE TABLE IF NOT EXISTS audit_log (
-  id TEXT PRIMARY KEY NOT NULL,
-  session_id TEXT NOT NULL,
-  seq INTEGER NOT NULL,
-  event_type TEXT NOT NULL,
-  payload_json TEXT NOT NULL,
-  prev_hash TEXT NOT NULL,
-  payload_hash TEXT NOT NULL,
-  hmac TEXT NOT NULL,
-  created_at INTEGER NOT NULL,
-  UNIQUE (session_id, seq)
-);
-CREATE INDEX IF NOT EXISTS idx_audit_log_session ON audit_log (session_id, seq);
 `
-  }
-
-  const statements = sql
-    .split(';')
-    .map((s) => s.trim())
-    .filter((s) => s.length > 0 && !s.startsWith('--'))
-
-  for (const statement of statements) {
-    await db.execute(statement)
+    for (const statement of splitSql(fallback)) {
+      await db.execute(statement)
+    }
+  } else {
+    for (const file of files) {
+      if (done.has(file.id)) continue
+      for (const statement of splitSql(file.sql)) {
+        await db.execute(statement)
+      }
+      await db.execute({
+        sql: `INSERT OR IGNORE INTO schema_migrations (id, applied_at) VALUES (?, ?)`,
+        args: [file.id, Date.now()],
+      })
+    }
   }
 
   migrated = true
 }
 
-/** Test helper: reset singleton between unit tests */
 export function _resetDbForTests(): void {
   client = null
   migrated = false

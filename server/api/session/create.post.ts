@@ -49,6 +49,8 @@ export default defineEventHandler(async (event) => {
     createdAt: now,
   })
 
+  // Career bootstraps lazily on first authenticated API (hub/squad/…)
+
   setHeader(event, 'Cache-Control', 'no-store')
   return { token }
 })

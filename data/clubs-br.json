@@ -1,0 +1,226 @@
+{
+  "version": "0.1.0",
+  "source": "OpenFootball-style factual clubs (seed)",
+  "clubs": [
+    {
+      "id": "fla",
+      "name": "Flamengo",
+      "shortName": "FLA",
+      "country": "BR",
+      "attack": 78,
+      "midfield": 76,
+      "defense": 72,
+      "goalkeeping": 74,
+      "reputation": 75
+    },
+    {
+      "id": "pal",
+      "name": "Palmeiras",
+      "shortName": "PAL",
+      "country": "BR",
+      "attack": 77,
+      "midfield": 75,
+      "defense": 74,
+      "goalkeeping": 73,
+      "reputation": 75
+    },
+    {
+      "id": "cor",
+      "name": "Corinthians",
+      "shortName": "COR",
+      "country": "BR",
+      "attack": 72,
+      "midfield": 73,
+      "defense": 71,
+      "goalkeeping": 72,
+      "reputation": 72
+    },
+    {
+      "id": "sao",
+      "name": "São Paulo",
+      "shortName": "SAO",
+      "country": "BR",
+      "attack": 73,
+      "midfield": 74,
+      "defense": 72,
+      "goalkeeping": 71,
+      "reputation": 73
+    },
+    {
+      "id": "san",
+      "name": "Santos",
+      "shortName": "SAN",
+      "country": "BR",
+      "attack": 70,
+      "midfield": 69,
+      "defense": 68,
+      "goalkeeping": 70,
+      "reputation": 69
+    },
+    {
+      "id": "gre",
+      "name": "Grêmio",
+      "shortName": "GRE",
+      "country": "BR",
+      "attack": 71,
+      "midfield": 72,
+      "defense": 70,
+      "goalkeeping": 71,
+      "reputation": 71
+    },
+    {
+      "id": "int",
+      "name": "Internacional",
+      "shortName": "INT",
+      "country": "BR",
+      "attack": 72,
+      "midfield": 71,
+      "defense": 71,
+      "goalkeeping": 70,
+      "reputation": 71
+    },
+    {
+      "id": "atl",
+      "name": "Atlético Mineiro",
+      "shortName": "CAM",
+      "country": "BR",
+      "attack": 74,
+      "midfield": 73,
+      "defense": 72,
+      "goalkeeping": 71,
+      "reputation": 73
+    },
+    {
+      "id": "cru",
+      "name": "Cruzeiro",
+      "shortName": "CRU",
+      "country": "BR",
+      "attack": 71,
+      "midfield": 70,
+      "defense": 70,
+      "goalkeeping": 69,
+      "reputation": 70
+    },
+    {
+      "id": "bot",
+      "name": "Botafogo",
+      "shortName": "BOT",
+      "country": "BR",
+      "attack": 73,
+      "midfield": 72,
+      "defense": 70,
+      "goalkeeping": 71,
+      "reputation": 72
+    },
+    {
+      "id": "vas",
+      "name": "Vasco",
+      "shortName": "VAS",
+      "country": "BR",
+      "attack": 69,
+      "midfield": 68,
+      "defense": 67,
+      "goalkeeping": 68,
+      "reputation": 68
+    },
+    {
+      "id": "flu",
+      "name": "Fluminense",
+      "shortName": "FLU",
+      "country": "BR",
+      "attack": 71,
+      "midfield": 72,
+      "defense": 69,
+      "goalkeeping": 70,
+      "reputation": 71
+    },
+    {
+      "id": "bah",
+      "name": "Bahia",
+      "shortName": "BAH",
+      "country": "BR",
+      "attack": 68,
+      "midfield": 67,
+      "defense": 66,
+      "goalkeeping": 67,
+      "reputation": 67
+    },
+    {
+      "id": "vit",
+      "name": "Vitória",
+      "shortName": "VIT",
+      "country": "BR",
+      "attack": 65,
+      "midfield": 64,
+      "defense": 63,
+      "goalkeeping": 64,
+      "reputation": 64
+    },
+    {
+      "id": "cea",
+      "name": "Ceará",
+      "shortName": "CEA",
+      "country": "BR",
+      "attack": 64,
+      "midfield": 63,
+      "defense": 62,
+      "goalkeeping": 63,
+      "reputation": 63
+    },
+    {
+      "id": "for",
+      "name": "Fortaleza",
+      "shortName": "FOR",
+      "country": "BR",
+      "attack": 70,
+      "midfield": 69,
+      "defense": 68,
+      "goalkeeping": 69,
+      "reputation": 69
+    },
+    {
+      "id": "cap",
+      "name": "Athletico-PR",
+      "shortName": "CAP",
+      "country": "BR",
+      "attack": 69,
+      "midfield": 68,
+      "defense": 67,
+      "goalkeeping": 68,
+      "reputation": 68
+    },
+    {
+      "id": "cui",
+      "name": "Cuiabá",
+      "shortName": "CUI",
+      "country": "BR",
+      "attack": 63,
+      "midfield": 62,
+      "defense": 61,
+      "goalkeeping": 62,
+      "reputation": 62
+    },
+    {
+      "id": "goias",
+      "name": "Goiás",
+      "shortName": "GOI",
+      "country": "BR",
+      "attack": 64,
+      "midfield": 63,
+      "defense": 62,
+      "goalkeeping": 63,
+      "reputation": 63
+    },
+    {
+      "id": "ava",
+      "name": "Avaí",
+      "shortName": "AVA",
+      "country": "BR",
+      "attack": 62,
+      "midfield": 61,
+      "defense": 60,
+      "goalkeeping": 61,
+      "reputation": 61
+    }
+  ]
+}

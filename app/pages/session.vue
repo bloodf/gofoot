@@ -23,12 +23,12 @@
         <label class="block text-xs font-medium text-gray-400" for="token-input">
           {{ t('session.pasteToken') }}
         </label>
-        <UTextarea
+        <textarea
           id="token-input"
           v-model="paste"
-          :rows="3"
-          autoresize
-          class="w-full font-mono text-xs"
+          data-testid="session-token-input"
+          rows="3"
+          class="w-full rounded-lg border border-gray-700 bg-gray-950 px-3 py-2 font-mono text-xs text-gray-100"
           :placeholder="t('session.tokenPlaceholder')"
         />
         <UButton
@@ -39,7 +39,6 @@
           color="gray"
           variant="soft"
           :loading="resuming"
-          :disabled="!paste.trim()"
           @click="onResume"
         >
           {{ t('session.continue') }}
@@ -100,10 +99,18 @@ async function onCreate() {
   error.value = ''
   try {
     const res = await $fetch<{ token: string }>('/api/session/create', { method: 'POST' })
+    if (!res?.token) {
+      throw new Error(t('session.errorCreate'))
+    }
     displayToken.value = res.token
     await save(res.token)
-  } catch (e) {
-    error.value = e instanceof Error ? e.message : t('session.errorCreate')
+  } catch (e: unknown) {
+    const msg =
+      e && typeof e === 'object' && 'data' in e
+        ? String((e as { data?: { statusMessage?: string } }).data?.statusMessage || '')
+        : ''
+    error.value =
+      msg || (e instanceof Error ? e.message : t('session.errorCreate')) || t('session.errorCreate')
   } finally {
     creating.value = false
   }
@@ -113,6 +120,11 @@ async function onResume() {
   resuming.value = true
   error.value = ''
   const value = paste.value.trim()
+  if (!value) {
+    error.value = t('session.errorResume')
+    resuming.value = false
+    return
+  }
   try {
     await $fetch('/api/session/resume', {
       method: 'POST',

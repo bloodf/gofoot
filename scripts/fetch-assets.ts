@@ -1,8 +1,7 @@
 /**
- * Copy brand SVGs into public/ for PWA + UI.
- * Raster icon generation (sharp) can be added when needed.
+ * Copy brand SVGs + SFX into public/ for PWA + match audio.
  */
-import { copyFileSync, mkdirSync, existsSync } from 'node:fs'
+import { copyFileSync, mkdirSync, existsSync, readdirSync } from 'node:fs'
 import { join } from 'node:path'
 
 const root = process.cwd()
@@ -25,6 +24,19 @@ for (const [from, to] of copies) {
   mkdirSync(join(dest, '..'), { recursive: true })
   copyFileSync(src, dest)
   console.log(`copied ${from} → public/${to}`)
+}
+
+const audioSrc = join(assets, 'audio')
+const audioDest = join(publicDir, 'audio')
+if (existsSync(audioSrc)) {
+  mkdirSync(audioDest, { recursive: true })
+  for (const f of readdirSync(audioSrc)) {
+    if (!f.endsWith('.mp3')) continue
+    // Skip TTS samples from public ship (reference only)
+    if (f.startsWith('tts-sample-')) continue
+    copyFileSync(join(audioSrc, f), join(audioDest, f))
+    console.log(`copied audio/${f}`)
+  }
 }
 
 console.log('fetch:assets done')

@@ -108,6 +108,7 @@ export default defineNuxtConfig({
 
   nitro: {
     preset: 'vercel',
+    serverAssets: [{ baseName: 'gofoot-data', dir: './data' }],
     esbuild: {
       options: {
         target: 'esnext',

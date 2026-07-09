@@ -20,22 +20,25 @@
   },
   "hub": {
     "title": "Hub",
-    "subtitle": "Stage 0 — mobile-first shell. Matches and economy land in later cycles.",
+    "subtitle": "Loading save…",
     "saveNamePlaceholder": "New save",
     "nextMatch": "Next match",
-    "nextMatchHint": "Fixture and rival soon",
-    "form": "Form",
-    "formHint": "Recent results",
+    "nextMatchHint": "Fixture and rival",
+    "openMatch": "Open match",
+    "form": "Table",
+    "formHint": "Division standings",
     "cash": "Cash",
     "cashHint": "Server-side economy",
     "board": "Board",
-    "boardHint": "Goals and pressure",
-    "trophies": "Trophies",
-    "trophiesHint": "Career progression",
+    "boardHint": "Board confidence",
+    "trophies": "Career",
+    "trophiesHint": "Progression ladder",
     "inbox": "Inbox",
     "inboxHint": "Messages and offers",
     "news": "News",
-    "newsHint": "Football world"
+    "newsHint": "Football world",
+    "fantasy": "Fantasy",
+    "fantasyHint": "Quick play"
   },
   "session": {
     "title": "Session",
@@ -55,16 +58,64 @@
   },
   "club": {
     "title": "Squad",
-    "placeholder": "Player list in a later cycle."
+    "placeholder": "Player list"
   },
   "career": {
     "title": "Career",
-    "placeholder": "Série D → Club World Cup ladder soon."
+    "placeholder": "Série D → Club World Cup ladder",
+    "season": "Season",
+    "now": "now",
+    "currentHint": "Win the division to climb the ladder.",
+    "viewTable": "View table"
+  },
+  "match": {
+    "waiting": "Tap Play to simulate (server-side).",
+    "play": "Play match (5 min)",
+    "pause": "Pause",
+    "resume": "Resume",
+    "live": "LIVE",
+    "paused": "Paused",
+    "scheduled": "Scheduled",
+    "ended": "Full-time"
+  },
+  "leagues": {
+    "title": "Leagues",
+    "club": "Club"
+  },
+  "fantasy": {
+    "title": "Fantasy",
+    "liveNow": "Live now",
+    "play": "Enter",
+    "soon": "Full fantasy sync in a polish pass."
+  },
+  "finance": {
+    "title": "Finance",
+    "tickets": "Tickets",
+    "ticketPrice": "Price",
+    "lastAttendance": "Last attendance",
+    "loan": "Loans",
+    "takeLoan": "Take loan",
+    "sponsors": "Sponsors",
+    "negotiate": "Negotiate joke brand",
+    "sponsorRejected": "Offer rejected — try another ask.",
+    "stadium": "Stadium",
+    "ledger": "Ledger"
+  },
+  "inbox": {
+    "title": "Inbox",
+    "empty": "No messages"
+  },
+  "audit": {
+    "title": "Audit",
+    "intact": "HMAC chain intact",
+    "broken": "Chain suspicious",
+    "entries": "entries"
   },
   "settings": {
     "title": "Settings",
     "language": "Language",
     "session": "Session",
-    "manageSession": "Manage session token"
+    "manageSession": "Manage session token",
+    "audit": "View audit chain"
   }
 }
