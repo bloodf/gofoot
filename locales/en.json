@@ -1,0 +1,70 @@
+{
+  "nav": {
+    "home": "Home",
+    "main": "Main navigation",
+    "hub": "Hub",
+    "club": "Club",
+    "career": "Career",
+    "settings": "Settings",
+    "menu": "Menu",
+    "session": "Session"
+  },
+  "audio": {
+    "dock": "Audio controls",
+    "play": "Play",
+    "pause": "Pause",
+    "volume": "Volume",
+    "speed": "Match speed",
+    "mute": "Mute",
+    "unmute": "Unmute"
+  },
+  "hub": {
+    "title": "Hub",
+    "subtitle": "Stage 0 — mobile-first shell. Matches and economy land in later cycles.",
+    "saveNamePlaceholder": "New save",
+    "nextMatch": "Next match",
+    "nextMatchHint": "Fixture and rival soon",
+    "form": "Form",
+    "formHint": "Recent results",
+    "cash": "Cash",
+    "cashHint": "Server-side economy",
+    "board": "Board",
+    "boardHint": "Goals and pressure",
+    "trophies": "Trophies",
+    "trophiesHint": "Career progression",
+    "inbox": "Inbox",
+    "inboxHint": "Messages and offers",
+    "news": "News",
+    "newsHint": "Football world"
+  },
+  "session": {
+    "title": "Session",
+    "subtitle": "No login. Your token is the key. Lose it = lose the save.",
+    "create": "Create session",
+    "continue": "Continue",
+    "pasteToken": "Paste existing token",
+    "tokenPlaceholder": "Paste token here…",
+    "tokenOnce": "Save this token now. We will not show it again.",
+    "copy": "Copy token",
+    "copied": "Copied!",
+    "tokenChip": "Session token",
+    "noToken": "No token",
+    "errorCreate": "Failed to create session",
+    "errorResume": "Invalid token or session not found",
+    "errorCopy": "Could not copy"
+  },
+  "club": {
+    "title": "Squad",
+    "placeholder": "Player list in a later cycle."
+  },
+  "career": {
+    "title": "Career",
+    "placeholder": "Série D → Club World Cup ladder soon."
+  },
+  "settings": {
+    "title": "Settings",
+    "language": "Language",
+    "session": "Session",
+    "manageSession": "Manage session token"
+  }
+}

@@ -1,0 +1,58 @@
+{
+  "name": "gofoot",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "description": "GoFoot — open-source, mobile-first football manager PWA",
+  "license": "MIT",
+  "scripts": {
+    "dev": "nuxt dev",
+    "build": "nuxt build",
+    "preview": "nuxt preview",
+    "postinstall": "nuxt prepare",
+    "typecheck": "nuxi typecheck",
+    "test": "vitest run",
+    "test:unit": "vitest run tests/unit",
+    "test:e2e": "playwright test",
+    "test:mobile": "playwright test --project=mobile",
+    "check:brands": "tsx scripts/check-brands.ts",
+    "check:attribution": "tsx scripts/check-attribution.ts",
+    "fetch:assets": "tsx scripts/fetch-assets.ts",
+    "lint": "eslint .",
+    "format": "prettier --write ."
+  },
+  "dependencies": {
+    "@libsql/client": "^0.15.15",
+    "@nuxt/image": "^1.11.0",
+    "@nuxt/ui": "^2.22.3",
+    "@nuxtjs/i18n": "^9.5.6",
+    "@pinia/nuxt": "^0.11.2",
+    "@vite-pwa/nuxt": "^1.0.4",
+    "@vueuse/core": "^13.6.0",
+    "@vueuse/nuxt": "^13.6.0",
+    "idb-keyval": "^6.2.2",
+    "nuxt": "^3.17.7",
+    "pinia": "^3.0.3",
+    "pinia-plugin-persistedstate": "^4.4.1",
+    "vue": "^3.5.18",
+    "vue-router": "^4.5.1"
+  },
+  "devDependencies": {
+    "@nuxt/eslint": "^1.7.1",
+    "@playwright/test": "^1.54.2",
+    "@types/node": "^24.1.0",
+    "@vue/test-utils": "^2.4.6",
+    "eslint": "^9.32.0",
+    "happy-dom": "^18.0.1",
+    "prettier": "^3.6.2",
+    "tailwindcss": "^3.4.19",
+    "tsx": "^4.20.3",
+    "typescript": "^5.9.2",
+    "vitest": "^3.2.4",
+    "vue-tsc": "^3.0.5"
+  },
+  "engines": {
+    "node": ">=20"
+  },
+  "packageManager": "pnpm@11.10.0"
+}

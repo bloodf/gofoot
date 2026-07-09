@@ -1,0 +1,40 @@
+# MiniMax team plan — Stage 0 (repo init + mobile shell)
+version: 1
+plan:
+  - id: designer-cycle-0
+    agent: designer
+    role: UX/UI Designer
+    task: |
+      Cycle 0 goal: Stage 0 scaffold — mobile shell + /session.
+      Inputs: GOFOOT_PROMPT.md §9 mobile-first constraints, brand palette.
+      Returns: ASCII wireframe for AppShell + /session, props, a11y list.
+  - id: engineer-cycle-0
+    agent: engineer
+    role: Engineer
+    depends_on: [designer-cycle-0]
+    task: |
+      Implement Nuxt 3 scaffold, Turso session skeleton, mobile shell, /session.
+      Scope: package.json, nuxt.config.ts, app/**, server/**, data/joke-brands.json,
+      locales/**, adapters, tests unit + mobile e2e smoke.
+      Validate: nuxi typecheck, nuxi build, pnpm test:unit, pnpm test:mobile.
+  - id: qa-cycle-0
+    agent: qa
+    role: QA Engineer
+    depends_on: [engineer-cycle-0]
+    task: |
+      Vitest for HMAC/token/RLS. Playwright mobile 390×844 for /session CTAs.
+      Returns: tests + pass/fail + bug list.
+  - id: staff-cycle-0
+    agent: staff
+    role: Staff Engineer
+    depends_on: [qa-cycle-0]
+    task: |
+      Review scaffold layering, mobile UX, secret handling.
+      Returns: approve / request-changes + confidence 1-5.
+  - id: security-cycle-0
+    agent: security
+    role: Security Advisor
+    depends_on: [staff-cycle-0]
+    task: |
+      Review session mint/resume, HMAC, rate limits, CSP headers, RLS helpers.
+      Returns: P0-P2 security report.

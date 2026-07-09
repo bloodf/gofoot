@@ -1,0 +1,127 @@
+{
+  "$schema": "https://gofoot.app/schemas/joke-brands/v1.json",
+  "version": "0.1.0",
+  "description": "Fictional Brazilian meme brands only. CI forbids real brand strings outside this file.",
+  "brands": [
+    {
+      "id": "tabajara",
+      "name": "Indústrias Tabajara",
+      "tier": "national",
+      "categories": ["conglomerate"]
+    },
+    {
+      "id": "agua-em-po-birigui",
+      "name": "Água em Pó Birigui",
+      "tier": "regional",
+      "categories": ["beverage"]
+    },
+    {
+      "id": "apostano",
+      "name": "Apostano",
+      "tier": "national",
+      "categories": ["betting_parody"]
+    },
+    {
+      "id": "casas-bacia",
+      "name": "Casas Bacia",
+      "tier": "national",
+      "categories": ["retail"]
+    },
+    {
+      "id": "sabonete-cacique-indalino",
+      "name": "Sabonete Cacique Indalino",
+      "tier": "regional",
+      "categories": ["hygiene"]
+    },
+    {
+      "id": "geladeira-posto-soares",
+      "name": "Geladeira do Posto Soares",
+      "tier": "local",
+      "categories": ["food"]
+    },
+    {
+      "id": "banco-do-nada",
+      "name": "Banco do Nada",
+      "tier": "national",
+      "categories": ["finance"]
+    },
+    {
+      "id": "telepato-tv",
+      "name": "Telepato TV",
+      "tier": "national",
+      "categories": ["media"]
+    },
+    {
+      "id": "churrasquinho-do-ze",
+      "name": "Churrasquinho do Zé",
+      "tier": "local",
+      "categories": ["food"]
+    },
+    {
+      "id": "oleo-de-peroba",
+      "name": "Óleo de Peroba Premium",
+      "tier": "regional",
+      "categories": ["household"]
+    },
+    {
+      "id": "seguro-quebrou",
+      "name": "Seguro Quebrou-Pagou",
+      "tier": "national",
+      "categories": ["insurance"]
+    },
+    {
+      "id": "pastel-de-vento",
+      "name": "Pastel de Vento Express",
+      "tier": "local",
+      "categories": ["food"]
+    },
+    {
+      "id": "moto-sem-guidao",
+      "name": "Moto Sem Guidão",
+      "tier": "regional",
+      "categories": ["transport"]
+    },
+    {
+      "id": "escola-de-samba-virtual",
+      "name": "Escola de Samba Virtual",
+      "tier": "national",
+      "categories": ["entertainment"]
+    },
+    {
+      "id": "cafe-com-pao-dormido",
+      "name": "Café com Pão Dormido",
+      "tier": "local",
+      "categories": ["food"]
+    },
+    {
+      "id": "academia-peito-de-aco",
+      "name": "Academia Peito de Aço",
+      "tier": "regional",
+      "categories": ["fitness"]
+    },
+    {
+      "id": "farmacia-toma-que-passa",
+      "name": "Farmácia Toma Que Passa",
+      "tier": "local",
+      "categories": ["health"]
+    },
+    {
+      "id": "construtora-caiu-mas-levantou",
+      "name": "Construtora Caiu Mas Levantou",
+      "tier": "regional",
+      "categories": ["construction"]
+    },
+    {
+      "id": "energia-apaga-as-vezes",
+      "name": "Energia Apaga Às Vezes",
+      "tier": "national",
+      "categories": ["utilities"]
+    },
+    {
+      "id": "app-de-fila",
+      "name": "FilaJá App",
+      "tier": "national",
+      "categories": ["tech"]
+    }
+  ]
+}

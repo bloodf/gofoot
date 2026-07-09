@@ -1,0 +1,70 @@
+{
+  "nav": {
+    "home": "Início",
+    "main": "Navegação principal",
+    "hub": "Hub",
+    "club": "Clube",
+    "career": "Carreira",
+    "settings": "Ajustes",
+    "menu": "Menu",
+    "session": "Sessão"
+  },
+  "audio": {
+    "dock": "Controles de áudio",
+    "play": "Reproduzir",
+    "pause": "Pausar",
+    "volume": "Volume",
+    "speed": "Velocidade da partida",
+    "mute": "Silenciar",
+    "unmute": "Ativar som"
+  },
+  "hub": {
+    "title": "Hub",
+    "subtitle": "Stage 0 — shell mobile-first. Partidas e economia chegam nos próximos ciclos.",
+    "saveNamePlaceholder": "Novo save",
+    "nextMatch": "Próxima partida",
+    "nextMatchHint": "Fixture e rival em breve",
+    "form": "Forma",
+    "formHint": "Últimos resultados",
+    "cash": "Caixa",
+    "cashHint": "Economia server-side",
+    "board": "Diretoria",
+    "boardHint": "Objetivos e pressão",
+    "trophies": "Troféus",
+    "trophiesHint": "Progressão da carreira",
+    "inbox": "Caixa de entrada",
+    "inboxHint": "Mensagens e ofertas",
+    "news": "Notícias",
+    "newsHint": "Mundo do futebol"
+  },
+  "session": {
+    "title": "Sessão",
+    "subtitle": "Sem login. Seu token é a chave. Perdeu = perdeu o save.",
+    "create": "Criar sessão",
+    "continue": "Continuar",
+    "pasteToken": "Colar token existente",
+    "tokenPlaceholder": "Cole o token aqui…",
+    "tokenOnce": "Guarde este token agora. Não mostramos de novo.",
+    "copy": "Copiar token",
+    "copied": "Copiado!",
+    "tokenChip": "Token da sessão",
+    "noToken": "Nenhum token",
+    "errorCreate": "Falha ao criar sessão",
+    "errorResume": "Token inválido ou sessão não encontrada",
+    "errorCopy": "Não foi possível copiar"
+  },
+  "club": {
+    "title": "Elenco",
+    "placeholder": "Lista de jogadores no próximo ciclo."
+  },
+  "career": {
+    "title": "Carreira",
+    "placeholder": "Escada Série D → Mundial em breve."
+  },
+  "settings": {
+    "title": "Ajustes",
+    "language": "Idioma",
+    "session": "Sessão",
+    "manageSession": "Gerenciar token de sessão"
+  }
+}

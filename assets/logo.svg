@@ -1,0 +1,82 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1000 1000" role="img" aria-label="GoFoot">
+  <title>GoFoot</title>
+  <desc>GoFoot football manager logo: stylized G and F-with-arrows inside a green football-field circle, with a Brazilian football in the center.</desc>
+
+  <!-- ============================================== -->
+  <!-- Football field ring                            -->
+  <!-- ============================================== -->
+  <g id="field">
+    <!-- Outer field circle -->
+    <circle cx="500" cy="500" r="472" fill="none" stroke="#0a8f4a" stroke-width="38"/>
+    <!-- Halfway (center) line -->
+    <line x1="500" y1="50" x2="500" y2="950" stroke="#0a8f4a" stroke-width="22"/>
+    <!-- Center field circle -->
+    <circle cx="500" cy="500" r="118" fill="none" stroke="#0a8f4a" stroke-width="18"/>
+  </g>
+
+  <!-- ============================================== -->
+  <!-- Football in the very center                    -->
+  <!-- Brazilian flag colors: green body, yellow hex  -->
+  <!-- ============================================== -->
+  <g id="ball" transform="translate(500 500)">
+    <!-- Green ball body -->
+    <circle cx="0" cy="0" r="92" fill="#0a8f4a" stroke="#0a8f4a" stroke-width="3"/>
+    <!-- Central pentagon (darker green, gives depth) -->
+    <polygon points="0,-32 30,-10 19,28 -19,28 -30,-10" fill="#086a39"/>
+    <!-- 5 yellow hexagons around the central pentagon -->
+    <g fill="#f5d35e" stroke="#0a8f4a" stroke-width="2">
+      <!-- Top -->
+      <polygon points="0,-78 38,-56 38,-12 0,10 -38,-12 -38,-56"/>
+      <!-- Top-right -->
+      <polygon points="56,-26 94,-4 94,40 56,62 18,40 18,-4"/>
+      <!-- Bottom-right -->
+      <polygon points="36,40 74,62 74,106 36,128 -2,106 -2,62"/>
+      <!-- Bottom-left -->
+      <polygon points="-36,40 2,62 2,106 -36,128 -74,106 -74,62"/>
+      <!-- Top-left -->
+      <polygon points="-56,-26 -18,-4 -18,40 -56,62 -94,40 -94,-4"/>
+    </g>
+  </g>
+
+  <!-- ============================================== -->
+  <!-- Stylized "G" — Greek-key / meander pattern     -->
+  <!-- ============================================== -->
+  <g id="letter-g" fill="#0a8f4a">
+    <!-- Outer top bar -->
+    <rect x="100" y="270" width="350" height="55"/>
+    <!-- Outer left vertical (full height) -->
+    <rect x="100" y="270" width="55" height="455"/>
+    <!-- Outer bottom bar -->
+    <rect x="100" y="670" width="350" height="55"/>
+    <!-- Outer right vertical (top half) -->
+    <rect x="395" y="270" width="55" height="225"/>
+    <!-- Outer right vertical (bottom half) -->
+    <rect x="395" y="670" width="55" height="55"/>
+    <!-- Inner meander — top section -->
+    <rect x="155" y="325" width="55" height="120"/>
+    <rect x="155" y="445" width="200" height="55"/>
+    <!-- Inner meander — bottom section -->
+    <rect x="155" y="500" width="200" height="55"/>
+    <rect x="155" y="555" width="55" height="115"/>
+  </g>
+
+  <!-- ============================================== -->
+  <!-- Stylized "F" with promotion/relegation arrows   -->
+  <!-- ============================================== -->
+  <g id="letter-f" fill="#c0392b">
+    <!-- F top bar -->
+    <rect x="550" y="270" width="350" height="55"/>
+    <!-- F left vertical (full height) -->
+    <rect x="550" y="270" width="55" height="455"/>
+    <!-- F middle bar -->
+    <rect x="550" y="470" width="220" height="55"/>
+    <!-- F bottom short bar -->
+    <rect x="550" y="670" width="160" height="55"/>
+
+    <!-- Promotion (up) arrow at top-right -->
+    <polygon points="720,170 820,170 820,210 870,210 770,80 670,210 720,210"/>
+    <!-- Relegation (down) arrow at bottom-right -->
+    <polygon points="720,830 820,830 820,790 870,790 770,920 670,790 720,790"/>
+  </g>
+</svg>

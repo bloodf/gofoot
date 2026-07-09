@@ -1,0 +1,17 @@
+{
+  "$schema": "https://gofoot.app/schemas/patch/v1.json",
+  "slug": "minimal-generic-shields",
+  "kind": "alternative_crests",
+  "title": "Minimalist generic shields (opt-in)",
+  "description": "Sample opt-in patch: replaces real club crests with procedurally generated minimalist shields. The default install already uses real names + Wikimedia open-licensed real crests; this patch is for users in trademark-sensitive contexts who still want the real competition structure but stylized generic visuals.",
+  "author": "@gofoot",
+  "license": "MIT",
+  "version": "2026.07.09",
+  "countries": ["BR", "AR", "GB", "ES", "IT", "DE", "FR", "PT", "NL"],
+  "assets": {
+    "base_url": "https://raw.githubusercontent.com/gofootapp/gofoot-patches/main/crests/minimal/",
+    "manifest": "manifest.json",
+    "preview": "https://raw.githubusercontent.com/gofootapp/gofoot-patches/main/crests/minimal/preview.png"
+  },
+  "sha256": "REPLACE_WITH_GIT_SHA_BEFORE_SHIPPING"
+}

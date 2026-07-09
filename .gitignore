@@ -1,0 +1,41 @@
+# Nuxt
+.nuxt
+.output
+.data
+.cache
+dist
+.nitro
+.vercel
+.netlify
+
+# Dependencies
+node_modules
+.pnpm-store
+
+# Env
+.env
+.env.*
+!.env.example
+
+# Logs / OS
+*.log
+.DS_Store
+Thumbs.db
+
+# Test / coverage
+coverage
+test-results
+playwright-report
+blob-report
+
+# IDE
+.idea
+.vscode/*
+!.vscode/extensions.json
+
+# Local DB
+*.db
+*.db-journal
+
+# Generated
+.omc
