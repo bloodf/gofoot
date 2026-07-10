@@ -33,6 +33,10 @@ export default defineNuxtConfig({
     sessionHmacSecret: process.env.SESSION_HMAC_SECRET || '',
     tursoDatabaseUrl: process.env.TURSO_DATABASE_URL || 'file:./.data/gofoot.db',
     tursoAuthToken: process.env.TURSO_AUTH_TOKEN || '',
+    /** TheSportsDB key — free public key is "3". Premium key optional. */
+    theSportsDbApiKey: process.env.THESPORTSDB_API_KEY || '3',
+    /** Optional football-data.org free-tier token for BSA squads */
+    footballDataApiToken: process.env.FOOTBALL_DATA_API_TOKEN || '',
     public: {
       appName: 'GoFoot',
     },

@@ -39,3 +39,4 @@ blob-report
 
 # Generated
 .omc
+*.legacy

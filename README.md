@@ -26,9 +26,21 @@ pnpm dev
 5. Fantasy → pick club → play matches  
 6. `/audit` → HMAC chain  
 
+## Data (live)
+
+Clubs + players load from **live HTTP APIs** at runtime (not committed JSON):
+
+1. **TheSportsDB** (default free key `3`) — teams by search + squads  
+2. Optional **football-data.org** if `FOOTBALL_DATA_API_TOKEN` is set  
+
+Results cache in local SQLite `web_cache` (12h). Diagnostic: `GET /api/catalog`.  
+Refresh: `GET /api/cron/refresh`.
+
+Joke-brand sponsors stay in `data/joke-brands.json` (fictional only).
+
 ## Stack
 
-Vue 3 · Nuxt 3 · Pinia · TypeScript · Turso/libSQL · Vercel · PWA · Web Audio · Web Speech
+Vue 3 · Nuxt 3 · Pinia · TypeScript · local SQLite (libSQL file) / Turso · Vercel · PWA · Web Audio · Web Speech
 
 ## Verify
 

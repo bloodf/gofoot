@@ -5,11 +5,13 @@ import { simulateMatch, type MatchSide } from '../engine/match'
 import { sellTickets, createLoan, tickLoan, negotiateSponsor } from '../engine/economy'
 import { defaultStadium, expandSector, expansionCost } from '../engine/stadium'
 import { chainLink, GENESIS_HASH, hmacHex } from './hmac'
-import { loadClubs, loadJokeBrands, playersForClub, clubById } from './data'
+import { ensureFootballData, loadClubs, loadJokeBrands, playersForClub, clubById } from './data'
 import { createRng } from '../engine/rng'
 import { simRestOfMatchday } from './career-ops'
 
 export async function ensureCareer(db: Client, sessionId: string, secret: string): Promise<void> {
+  await ensureFootballData(db)
+
   const existing = await db.execute({
     sql: `SELECT session_id FROM career_state WHERE session_id = ?`,
     args: [sessionId],
@@ -138,17 +140,20 @@ export async function ensureCareer(db: Client, sessionId: string, secret: string
       VALUES (?, '4-3-3', 'balanced', 50, 50, 50)`,
     args: [sessionId],
   })
-  const youthNames = ['João', 'Pedro', 'Lucas']
-  const youthPos = ['CM', 'ST', 'CB']
-  for (let i = 0; i < 3; i++) {
+  const youthRows: Array<{ name: string; pos: string }> = [
+    { name: 'João', pos: 'CM' },
+    { name: 'Pedro', pos: 'ST' },
+    { name: 'Lucas', pos: 'CB' },
+  ]
+  for (const [i, y] of youthRows.entries()) {
     await db.execute({
       sql: `INSERT INTO youth_players (id, session_id, name, position, age, potential, overall, status)
         VALUES (?, ?, ?, ?, ?, ?, ?, 'academy')`,
       args: [
         randomUUID(),
         sessionId,
-        `${youthNames[i]} ${rng.pick(['Silva', 'Santos', 'Lima'])}`,
-        youthPos[i],
+        `${y.name} ${rng.pick(['Silva', 'Santos', 'Lima'])}`,
+        y.pos,
         16 + i,
         65 + rng.int(0, 20),
         48 + rng.int(0, 12),

@@ -1,15 +1,19 @@
+import { ensureMigrated, getDb } from '../lib/db'
+import { ensureFootballData, loadClubs } from '../lib/data'
 import { fantasyLiveCard } from '../lib/game'
-import { loadClubs } from '../lib/data'
 
-export default defineEventHandler(() => {
+export default defineEventHandler(async () => {
+  await ensureMigrated()
+  const db = getDb()
+  await ensureFootballData(db)
   return {
     live: fantasyLiveCard(),
     presets: [
-      { id: 'live_now', title: 'Live now', description: 'Biggest match card of the day' },
+      { id: 'live_now', title: 'Live now', description: "Today's card — take over a club" },
       {
         id: 'rest_of_serie_a',
         title: 'Play the rest of Série A',
-        description: 'Take over from today and finish the tournament',
+        description: 'Take over and finish the tournament',
       },
       {
         id: 'switch_team',
@@ -17,6 +21,10 @@ export default defineEventHandler(() => {
         description: 'Keep playing after cup exit',
       },
     ],
-    clubs: loadClubs().slice(0, 8).map((c) => ({ id: c.id, name: c.name })),
+    clubs: loadClubs().slice(0, 12).map((c) => ({ id: c.id, name: c.name })),
+    catalog: {
+      source: (await ensureFootballData(db)).source,
+      clubCount: loadClubs().length,
+    },
   }
 })

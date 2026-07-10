@@ -13,7 +13,7 @@ import {
 } from '../engine/competition'
 import { simulateMatch, type MatchSide } from '../engine/match'
 import { createRng } from '../engine/rng'
-import { clubById, loadClubs, loadPlayers } from './data'
+import { clubById, ensureFootballData, loadClubs, loadPlayers } from './data'
 import { chainLink, GENESIS_HASH, hmacHex } from './hmac'
 
 function sideFromClub(clubId: string): MatchSide {
@@ -90,6 +90,7 @@ export async function simAiFixture(
   fixtureId: string,
   secret: string,
 ): Promise<{ homeGoals: number; awayGoals: number }> {
+  await ensureFootballData(db)
   const fx = (
     await db.execute({
       sql: `SELECT * FROM fixtures WHERE session_id = ? AND id = ?`,
@@ -177,6 +178,7 @@ export async function simRestOfSeason(
   secret: string,
   opts: { includeUser?: boolean } = {},
 ): Promise<{ simulated: number; promoted?: string | null }> {
+  await ensureFootballData(db)
   const career = (
     await db.execute({
       sql: `SELECT * FROM career_state WHERE session_id = ?`,
@@ -235,6 +237,7 @@ export async function endSeason(
   sessionId: string,
   secret: string,
 ): Promise<string | null> {
+  await ensureFootballData(db)
   const career = (
     await db.execute({
       sql: `SELECT * FROM career_state WHERE session_id = ?`,
@@ -456,6 +459,7 @@ export async function setTactics(
 }
 
 export async function ensureTransferList(db: Client, sessionId: string) {
+  await ensureFootballData(db)
   const count = (
     await db.execute({
       sql: `SELECT COUNT(*) as c FROM transfer_list WHERE session_id=? AND status='listed'`,
@@ -639,6 +643,7 @@ export async function startFantasy(
   mode: string,
   clubId: string,
 ) {
+  await ensureFootballData(db)
   const club = clubById(clubId)
   if (!club) throw createError({ statusCode: 400, statusMessage: 'Invalid club' })
 
@@ -660,6 +665,7 @@ export async function startFantasy(
 }
 
 export async function playFantasyMatch(db: Client, sessionId: string, fantasyId: string, secret: string) {
+  await ensureFootballData(db)
   const row = (
     await db.execute({
       sql: `SELECT * FROM fantasy_saves WHERE session_id=? AND id=?`,
@@ -716,6 +722,7 @@ export async function playFantasyMatch(db: Client, sessionId: string, fantasyId:
 }
 
 export async function getCupBracket(db: Client, sessionId: string) {
+  await ensureFootballData(db)
   const rows = (
     await db.execute({
       sql: `SELECT * FROM cup_ties WHERE session_id=? ORDER BY round ASC`,
@@ -742,6 +749,7 @@ export async function getCupBracket(db: Client, sessionId: string) {
 }
 
 export async function simCupTie(db: Client, sessionId: string, tieId: string) {
+  await ensureFootballData(db)
   const r = (
     await db.execute({
       sql: `SELECT * FROM cup_ties WHERE session_id=? AND id=?`,

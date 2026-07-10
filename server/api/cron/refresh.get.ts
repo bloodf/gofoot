@@ -1,8 +1,9 @@
 /**
- * Vercel Cron entry — cached web refresh placeholder.
- * Secure with CRON_SECRET in production.
+ * Vercel Cron / manual refresh — re-fetch live football catalog into web_cache.
  */
 import { ensureMigrated, getDb } from '../../lib/db'
+import { clearLiveCatalogMemory } from '../../lib/live-football'
+import { ensureFootballData } from '../../lib/data'
 
 export default defineEventHandler(async (event) => {
   const secret = process.env.CRON_SECRET
@@ -16,18 +17,34 @@ export default defineEventHandler(async (event) => {
   await ensureMigrated()
   const db = getDb()
   const now = Date.now()
+
+  // Bust memory + SQLite cache keys by deleting rows
+  await db.execute({
+    sql: `DELETE FROM web_cache WHERE cache_key LIKE 'live:%'`,
+  }).catch(() => null)
+  clearLiveCatalogMemory()
+
+  const cat = await ensureFootballData(db)
+
   await db.execute({
     sql: `INSERT INTO refresh_state (job_name, last_run_at, last_status, meta_json)
       VALUES ('web_refresh', ?, 'ok', ?)
       ON CONFLICT(job_name) DO UPDATE SET last_run_at=excluded.last_run_at, last_status=excluded.last_status, meta_json=excluded.meta_json`,
-    args: [now, JSON.stringify({ note: 'local seed refresh heartbeat', source: 'seed-index' })],
-  })
-  await db.execute({
-    sql: `INSERT INTO web_cache (cache_key, payload_json, fetched_at, expires_at)
-      VALUES ('heartbeat', ?, ?, ?)
-      ON CONFLICT(cache_key) DO UPDATE SET payload_json=excluded.payload_json, fetched_at=excluded.fetched_at, expires_at=excluded.expires_at`,
-    args: [JSON.stringify({ ok: true }), now, now + 86_400_000],
+    args: [
+      now,
+      JSON.stringify({
+        source: cat.source,
+        clubs: cat.clubs.length,
+        players: cat.players.length,
+      }),
+    ],
   })
 
-  return { ok: true, at: now }
+  return {
+    ok: true,
+    at: now,
+    source: cat.source,
+    clubs: cat.clubs.length,
+    players: cat.players.length,
+  }
 })
