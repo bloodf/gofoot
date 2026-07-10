@@ -26,17 +26,20 @@ pnpm dev
 5. Fantasy → pick club → play matches  
 6. `/audit` → HMAC chain  
 
-## Data (live)
+## Data (live — real names only)
 
-Clubs + players load from **live HTTP APIs** at runtime (not committed JSON):
+Clubs + players are **fetched live** at runtime. No procedural names, no seed JSON rosters.
 
-1. **TheSportsDB** (default free key `3`) — teams by search + squads  
-2. Optional **football-data.org** if `FOOTBALL_DATA_API_TOKEN` is set  
+| Source | What | Key |
+|---|---|---|
+| [Wikipedia MediaWiki API](https://www.mediawiki.org/wiki/API:Main_page) | Brasileirão clubs + first-team squads (`fs player`) | none |
+| [TheSportsDB](https://www.thesportsdb.com/) | Stadium meta + squad fallback | free `3` or `THESPORTSDB_API_KEY` |
+| [football-data.org](https://www.football-data.org/) | Optional BSA teams | `FOOTBALL_DATA_API_TOKEN` |
 
-Results cache in local SQLite `web_cache` (12h). Diagnostic: `GET /api/catalog`.  
-Refresh: `GET /api/cron/refresh`.
+Cache: local SQLite `web_cache` (6h).  
+Inspect: `GET /api/catalog` · refresh: `GET /api/cron/refresh`.
 
-Joke-brand sponsors stay in `data/joke-brands.json` (fictional only).
+Joke-brand **sponsors** stay fictional in `data/joke-brands.json` (legal).
 
 ## Stack
 

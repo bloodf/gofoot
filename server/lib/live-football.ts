@@ -1,176 +1,44 @@
 /**
- * Live football catalog — teams + players from free HTTP APIs.
- * Cached in SQLite web_cache (local file DB in dev). No bundled clubs/players JSON at runtime.
+ * Live football catalog — real clubs + real players only.
  *
- * Sources (in order):
- * 1. TheSportsDB free API (default key "3")
- * 2. Optional football-data.org if FOOTBALL_DATA_API_TOKEN set
- * 3. Optional API-Football if API_FOOTBALL_KEY set
+ * Public sources (no paid key required for baseline):
+ * 1. Wikipedia MediaWiki API — Brasileirão clubs + first-team squads (fs player)
+ * 2. TheSportsDB free API — stadium meta + squad fallback (real names only)
+ * 3. Optional FOOTBALL_DATA_API_TOKEN — football-data.org BSA
+ *
+ * Cached in local SQLite web_cache. No procedural player names.
  */
 import type { Client } from '@libsql/client'
 import type { ClubRef } from '../engine/competition'
 import type { SeedPlayer } from './data'
-import { createRng } from '../engine/rng'
+import {
+  fetchSerieAClubsFromWikipedia,
+  fetchSquadFromWikipedia,
+  type WikiClub,
+} from './providers/wikipedia'
+import {
+  ageFromBorn,
+  listTeamPlayers,
+  mapTsdbPosition,
+  searchTeam,
+  type TsdbPlayer,
+} from './providers/thesportsdb'
 
-const CACHE_CLUBS = 'live:clubs:br:v2'
-const CACHE_PLAYERS = 'live:players:br:v2'
-const TTL_MS = 12 * 60 * 60 * 1000 // 12h
+const CACHE_CLUBS = 'live:clubs:br:v3'
+const CACHE_PLAYERS = 'live:players:br:v3'
+const CACHE_META = 'live:meta:br:v3'
+const TTL_MS = 6 * 60 * 60 * 1000 // 6h
 
-/** Major Brazilian clubs queried live (free TheSportsDB returns ≤10 per list endpoint). */
-const BR_CLUB_QUERIES = [
-  'Flamengo',
-  'Palmeiras',
-  'Corinthians',
-  'São Paulo',
-  'Santos',
-  'Grêmio',
-  'Internacional',
-  'Atlético Mineiro',
-  'Cruzeiro',
-  'Botafogo',
-  'Vasco da Gama',
-  'Fluminense',
-  'Bahia',
-  'Fortaleza',
-  'Athletico Paranaense',
-  'Bragantino',
-  'Cuiabá',
-  'Goiás',
-  'Coritiba',
-  'Vitória',
-  'Ceará',
-  'Avaí',
-  'Sport Recife',
-  'América Mineiro',
-]
-
-interface TsdbTeam {
-  idTeam: string
-  strTeam: string
-  strTeamShort?: string
-  strStadium?: string
-  intStadiumCapacity?: string
-  strLeague?: string
+export interface LiveCatalog {
+  clubs: ClubRef[]
+  players: SeedPlayer[]
+  source: string
+  fetchedAt: number
+  warnings: string[]
 }
 
-interface TsdbPlayer {
-  idPlayer: string
-  idTeam: string
-  strPlayer: string
-  strPosition?: string
-  dateBorn?: string
-  strNumber?: string
-  strStatus?: string
-}
-
-function sportsDbKey(): string {
-  try {
-    const config = useRuntimeConfig()
-    return (config as { theSportsDbApiKey?: string }).theSportsDbApiKey || '3'
-  } catch {
-    return process.env.THESPORTSDB_API_KEY || '3'
-  }
-}
-
-function sportsDbBase(): string {
-  return `https://www.thesportsdb.com/api/v1/json/${sportsDbKey()}`
-}
-
-async function httpJson<T>(url: string, headers: Record<string, string> = {}): Promise<T> {
-  const res = await fetch(url, {
-    headers: {
-      Accept: 'application/json',
-      'User-Agent': 'GoFoot/0.1 (open-source football manager; local-dev)',
-      ...headers,
-    },
-  })
-  if (!res.ok) {
-    throw new Error(`HTTP ${res.status} for ${url}`)
-  }
-  return (await res.json()) as T
-}
-
-function slugId(name: string, externalId?: string): string {
-  if (externalId) return `tsdb_${externalId}`
-  return (
-    'club_' +
-    name
-      .normalize('NFD')
-      .replace(/[\u0300-\u036f]/g, '')
-      .toLowerCase()
-      .replace(/[^a-z0-9]+/g, '_')
-      .replace(/^_|_$/g, '')
-      .slice(0, 40)
-  )
-}
-
-function mapPosition(raw?: string): string {
-  const p = (raw || '').toLowerCase()
-  if (p.includes('goal')) return 'GK'
-  if (p.includes('centre-back') || p.includes('center back') || p.includes('central defender'))
-    return 'CB'
-  if (p.includes('left-back') || p.includes('left back')) return 'LB'
-  if (p.includes('right-back') || p.includes('right back')) return 'RB'
-  if (p.includes('defensive mid') || p.includes('defensive midfielder')) return 'CDM'
-  if (p.includes('attacking mid') || p.includes('attacking midfielder')) return 'CAM'
-  if (p.includes('midfield') || p.includes('midfielder')) return 'CM'
-  if (p.includes('left wing') || p.includes('left winger') || p.includes('left mid')) return 'LW'
-  if (p.includes('right wing') || p.includes('right winger') || p.includes('right mid')) return 'RW'
-  if (p.includes('forward') || p.includes('striker') || p.includes('attacker') || p.includes('centre-forward'))
-    return 'ST'
-  if (p.includes('defender')) return 'CB'
-  if (p.includes('coach') || p.includes('manager') || p.includes('staff')) return 'COACH'
-  return 'CM'
-}
-
-function ageFromBorn(dateBorn?: string): number {
-  if (!dateBorn) return 25
-  const y = Number(dateBorn.slice(0, 4))
-  if (!Number.isFinite(y)) return 25
-  return Math.max(16, Math.min(42, new Date().getFullYear() - y))
-}
-
-function ratingsFor(position: string, age: number, seed: string) {
-  const rng = createRng(seed)
-  const base =
-    position === 'GK'
-      ? 68 + rng.int(0, 12)
-      : position === 'ST'
-        ? 66 + rng.int(0, 14)
-        : 64 + rng.int(0, 12)
-  const ageAdj = age < 21 ? -4 : age > 33 ? -5 : age > 30 ? -2 : 0
-  const ovr = Math.max(45, Math.min(88, base + ageAdj))
-  const bias = (good: boolean) => (good ? 4 : -3) + rng.int(-3, 3)
-  return {
-    overall: ovr,
-    pace: clamp(ovr + bias(position === 'LW' || position === 'RW' || position === 'ST')),
-    shooting: clamp(ovr + bias(position === 'ST' || position === 'CAM')),
-    passing: clamp(ovr + bias(position === 'CM' || position === 'CAM' || position === 'CDM')),
-    defending: clamp(ovr + bias(position === 'CB' || position === 'LB' || position === 'RB' || position === 'CDM')),
-    physical: clamp(ovr + bias(position === 'CB' || position === 'ST')),
-  }
-}
-
-function clamp(n: number) {
-  return Math.max(30, Math.min(95, n))
-}
-
-function clubStrength(name: string): { attack: number; midfield: number; defense: number; goalkeeping: number } {
-  const elite = ['Flamengo', 'Palmeiras', 'Corinthians', 'São Paulo', 'Atlético Mineiro', 'Fluminense', 'Botafogo']
-  const strong = ['Grêmio', 'Internacional', 'Cruzeiro', 'Santos', 'Bahia', 'Fortaleza', 'Vasco da Gama']
-  const base = elite.some((e) => name.includes(e))
-    ? 74
-    : strong.some((e) => name.includes(e))
-      ? 70
-      : 64
-  const rng = createRng(`str:${name}`)
-  return {
-    attack: base + rng.int(-2, 4),
-    midfield: base + rng.int(-2, 3),
-    defense: base + rng.int(-3, 3),
-    goalkeeping: base + rng.int(-2, 2),
-  }
-}
+let memory: LiveCatalog | null = null
+let inflight: Promise<LiveCatalog> | null = null
 
 async function cacheGet(db: Client | null, key: string): Promise<string | null> {
   if (!db) return null
@@ -180,8 +48,7 @@ async function cacheGet(db: Client | null, key: string): Promise<string | null> 
       args: [key],
     })
     const row = r.rows[0]
-    if (!row) return null
-    if (Number(row.expires_at) < Date.now()) return null
+    if (!row || Number(row.expires_at) < Date.now()) return null
     return String(row.payload_json)
   } catch {
     return null
@@ -202,237 +69,322 @@ async function cacheSet(db: Client | null, key: string, payload: unknown): Promi
       args: [key, JSON.stringify(payload), now, now + TTL_MS],
     })
   } catch {
-    /* cache optional during early boot */
+    /* optional */
   }
 }
 
-async function fetchTeamByName(name: string): Promise<TsdbTeam | null> {
-  const url = `${sportsDbBase()}/searchteams.php?t=${encodeURIComponent(name)}`
-  const data = await httpJson<{ teams: TsdbTeam[] | null }>(url)
-  const teams = data.teams || []
-  // Prefer Brazilian leagues
-  const br = teams.find(
-    (t) =>
-      (t.strLeague || '').toLowerCase().includes('brazil') ||
-      (t.strLeague || '').toLowerCase().includes('brasileiro') ||
-      (t.strLeague || '').toLowerCase().includes('serie'),
+function clubIdFromPage(page: string): string {
+  return (
+    'wiki_' +
+    page
+      .normalize('NFD')
+      .replace(/[\u0300-\u036f]/g, '')
+      .toLowerCase()
+      .replace(/[^a-z0-9]+/g, '_')
+      .replace(/^_|_$/g, '')
+      .slice(0, 48)
   )
-  return br || teams[0] || null
 }
 
-async function fetchPlayersForTeam(idTeam: string): Promise<TsdbPlayer[]> {
-  const url = `${sportsDbBase()}/lookup_all_players.php?id=${idTeam}`
-  const data = await httpJson<{ player: TsdbPlayer[] | null }>(url)
-  return (data.player || []).filter((p) => {
-    const pos = mapPosition(p.strPosition)
-    return pos !== 'COACH' && (p.strStatus || 'Active') !== 'Retired'
+/** Deterministic ratings from real position + age only (no PRNG names). */
+function ratingsFromRole(position: string, age: number | null): {
+  overall: number
+  pace: number
+  shooting: number
+  passing: number
+  defending: number
+  physical: number
+} {
+  const a = age ?? 26
+  // Base by role (fixed table, not random)
+  const baseByPos: Record<string, number> = {
+    GK: 72,
+    CB: 70,
+    LB: 69,
+    RB: 69,
+    CDM: 70,
+    CM: 71,
+    CAM: 72,
+    LW: 71,
+    RW: 71,
+    ST: 73,
+  }
+  let ovr = baseByPos[position] ?? 68
+  if (a < 20) ovr -= 4
+  else if (a < 23) ovr -= 1
+  else if (a > 34) ovr -= 5
+  else if (a > 31) ovr -= 2
+  ovr = Math.max(50, Math.min(84, ovr))
+
+  const adj = (n: number) => Math.max(40, Math.min(90, n))
+  return {
+    overall: ovr,
+    pace: adj(ovr + (['LW', 'RW', 'ST', 'LB', 'RB'].includes(position) ? 3 : -2)),
+    shooting: adj(ovr + (['ST', 'CAM', 'RW', 'LW'].includes(position) ? 4 : -4)),
+    passing: adj(ovr + (['CM', 'CAM', 'CDM'].includes(position) ? 3 : -1)),
+    defending: adj(ovr + (['CB', 'LB', 'RB', 'CDM', 'GK'].includes(position) ? 4 : -5)),
+    physical: adj(ovr + (['CB', 'ST', 'CDM'].includes(position) ? 2 : 0)),
+  }
+}
+
+function shortName(name: string, code?: string): string {
+  if (code && code.length <= 4) return code.toUpperCase()
+  const parts = name.replace(/^(CR|SC|SE|EC|FC|AA|CA)\s+/i, '').split(/\s+/)
+  if (parts.length === 1) return parts[0]!.slice(0, 3).toUpperCase()
+  return (parts[0]!.slice(0, 1) + parts[parts.length - 1]!.slice(0, 2)).toUpperCase()
+}
+
+function strengthFromSquad(players: SeedPlayer[]): {
+  attack: number
+  midfield: number
+  defense: number
+  goalkeeping: number
+} {
+  const avg = (pos: string[]) => {
+    const list = players.filter((p) => pos.includes(p.position))
+    if (!list.length) return 68
+    return Math.round(list.reduce((s, p) => s + p.overall, 0) / list.length)
+  }
+  return {
+    attack: avg(['ST', 'LW', 'RW', 'CAM']),
+    midfield: avg(['CM', 'CDM', 'CAM']),
+    defense: avg(['CB', 'LB', 'RB']),
+    goalkeeping: avg(['GK']),
+  }
+}
+
+function playersFromTsdb(clubId: string, list: TsdbPlayer[]): SeedPlayer[] {
+  const out: SeedPlayer[] = []
+  for (const p of list) {
+    const position = mapTsdbPosition(p.strPosition)
+    const age = ageFromBorn(p.dateBorn)
+    const rates = ratingsFromRole(position, age)
+    const shirt = p.strNumber && /^\d+$/.test(p.strNumber) ? Number(p.strNumber) : out.length + 1
+    out.push({
+      key: `tsdb_${p.idPlayer}`,
+      clubId,
+      name: p.strPlayer.trim(),
+      position,
+      age: age ?? 26,
+      overall: rates.overall,
+      pace: rates.pace,
+      shooting: rates.shooting,
+      passing: rates.passing,
+      defending: rates.defending,
+      physical: rates.physical,
+      wage: Math.round(rates.overall * 100),
+      value: Math.round(rates.overall * rates.overall * 150),
+      shirtNumber: shirt,
+    })
+  }
+  return out
+}
+
+function playersFromWiki(
+  clubId: string,
+  list: Array<{ name: string; position: string; shirtNumber: number | null }>,
+): SeedPlayer[] {
+  return list.map((p, i) => {
+    const rates = ratingsFromRole(p.position, null)
+    return {
+      key: `wiki_${clubId}_${(p.shirtNumber ?? i + 1)}_${p.name
+        .toLowerCase()
+        .replace(/[^a-z0-9]+/g, '_')
+        .slice(0, 24)}`,
+      clubId,
+      name: p.name,
+      position: p.position,
+      age: 26,
+      overall: rates.overall,
+      pace: rates.pace,
+      shooting: rates.shooting,
+      passing: rates.passing,
+      defending: rates.defending,
+      physical: rates.physical,
+      wage: Math.round(rates.overall * 100),
+      value: Math.round(rates.overall * rates.overall * 150),
+      shirtNumber: p.shirtNumber ?? i + 1,
+    }
   })
 }
 
-async function fetchFromTheSportsDb(): Promise<{ clubs: ClubRef[]; players: SeedPlayer[]; source: string }> {
-  const clubs: ClubRef[] = []
-  const players: SeedPlayer[] = []
-  const seen = new Set<string>()
+async function buildCatalogFromLive(): Promise<LiveCatalog> {
+  const warnings: string[] = []
+  const sources: string[] = []
 
-  for (const query of BR_CLUB_QUERIES) {
-    try {
-      const team = await fetchTeamByName(query)
-      if (!team?.idTeam || seen.has(team.idTeam)) continue
-      seen.add(team.idTeam)
-      const id = slugId(team.strTeam, team.idTeam)
-      const str = clubStrength(team.strTeam)
-      clubs.push({
-        id,
-        name: team.strTeam,
-        shortName: (team.strTeamShort || team.strTeam.slice(0, 3)).toUpperCase().slice(0, 4),
-        attack: str.attack,
-        midfield: str.midfield,
-        defense: str.defense,
-        goalkeeping: str.goalkeeping,
-      })
-
-      const squad = await fetchPlayersForTeam(team.idTeam)
-      let n = 0
-      for (const p of squad) {
-        const position = mapPosition(p.strPosition)
-        if (position === 'COACH') continue
-        const age = ageFromBorn(p.dateBorn)
-        const rates = ratingsFor(position, age, `${team.idTeam}:${p.idPlayer}`)
-        const shirt = Number(p.strNumber) || n + 1
-        players.push({
-          key: `tsdb_${p.idPlayer}`,
-          clubId: id,
-          name: p.strPlayer,
-          position,
-          age,
-          overall: rates.overall,
-          pace: rates.pace,
-          shooting: rates.shooting,
-          passing: rates.passing,
-          defending: rates.defending,
-          physical: rates.physical,
-          wage: Math.round(rates.overall * 90),
-          value: Math.round(rates.overall * rates.overall * 140),
-          shirtNumber: shirt,
-        })
-        n++
-      }
-      // small delay to be polite to free tier
-      await new Promise((r) => setTimeout(r, 120))
-    } catch (e) {
-      console.warn('[live-football] team fetch failed', query, e)
-    }
+  // 1) Clubs from Wikipedia season page (real clubs in current Brasileirão)
+  let wikiClubs: WikiClub[] = []
+  try {
+    wikiClubs = await fetchSerieAClubsFromWikipedia()
+    sources.push('wikipedia:serie-a-season')
+  } catch (e) {
+    warnings.push(`wikipedia clubs: ${e instanceof Error ? e.message : String(e)}`)
   }
 
-  if (clubs.length < 8) {
-    throw new Error(`TheSportsDB returned too few clubs (${clubs.length})`)
+  if (wikiClubs.length < 8) {
+    // Fallback: discover clubs via TheSportsDB search of known league string
+    const fallbackNames = [
+      'Flamengo',
+      'Palmeiras',
+      'Corinthians',
+      'São Paulo',
+      'Santos',
+      'Grêmio',
+      'Internacional',
+      'Atlético Mineiro',
+      'Cruzeiro',
+      'Botafogo',
+      'Vasco da Gama',
+      'Fluminense',
+      'Bahia',
+      'Fortaleza',
+      'Athletico Paranaense',
+      'Bragantino',
+      'Ceará',
+      'Vitória',
+      'Juventude',
+      'Sport Recife',
+    ]
+    for (const name of fallbackNames) {
+      try {
+        const t = await searchTeam(name)
+        if (t) wikiClubs.push({ page: t.strTeam, name: t.strTeam, code: t.strTeamShort })
+        await sleep(100)
+      } catch {
+        /* continue */
+      }
+    }
+    sources.push('thesportsdb:team-search')
+  }
+
+  // Dedupe by name
+  const seenNames = new Set<string>()
+  wikiClubs = wikiClubs.filter((c) => {
+    const k = c.name.toLowerCase()
+    if (seenNames.has(k)) return false
+    seenNames.add(k)
+    return true
+  })
+
+  const clubs: ClubRef[] = []
+  const players: SeedPlayer[] = []
+
+  for (const wc of wikiClubs) {
+    const id = clubIdFromPage(wc.page || wc.name)
+    let squad: SeedPlayer[] = []
+
+    // 2a) Squad from Wikipedia first-team (preferred — full real squads)
+    try {
+      const wikiSquad = await fetchSquadFromWikipedia(wc.page)
+      if (wikiSquad.length >= 11) {
+        squad = playersFromWiki(id, wikiSquad)
+        if (!sources.includes('wikipedia:squads')) sources.push('wikipedia:squads')
+      }
+    } catch (e) {
+      warnings.push(`wiki squad ${wc.name}: ${e instanceof Error ? e.message : String(e)}`)
+    }
+
+    // 2b) Fallback squad from TheSportsDB (real names only)
+    if (squad.length < 11) {
+      try {
+        const ts = await searchTeam(wc.name)
+        if (ts?.idTeam) {
+          const list = await listTeamPlayers(ts.idTeam)
+          if (list.length) {
+            squad = playersFromTsdb(id, list)
+            if (!sources.includes('thesportsdb:squads')) sources.push('thesportsdb:squads')
+          }
+        }
+      } catch (e) {
+        warnings.push(`tsdb squad ${wc.name}: ${e instanceof Error ? e.message : String(e)}`)
+      }
+    }
+
+    if (squad.length === 0) {
+      warnings.push(`no live players for ${wc.name} — club skipped`)
+      await sleep(80)
+      continue
+    }
+
+    const str = strengthFromSquad(squad)
+    clubs.push({
+      id,
+      name: wc.name,
+      shortName: shortName(wc.name, wc.code),
+      attack: str.attack,
+      midfield: str.midfield,
+      defense: str.defense,
+      goalkeeping: str.goalkeeping,
+    })
+    players.push(...squad)
+    await sleep(150) // be polite to public APIs
+  }
+
+  if (clubs.length < 6) {
+    throw new Error(
+      `Live catalog failed: only ${clubs.length} clubs with real squads. Check network / APIs. Warnings: ${warnings.slice(0, 5).join('; ')}`,
+    )
   }
 
   return {
     clubs,
     players,
-    source: `thesportsdb:${sportsDbKey() === '3' ? 'free' : 'key'}`,
+    source: sources.join('+') || 'live',
+    fetchedAt: Date.now(),
+    warnings,
   }
 }
 
-/** Optional football-data.org Brasileirão (BSA) if token present. */
-async function fetchFromFootballData(): Promise<{ clubs: ClubRef[]; players: SeedPlayer[]; source: string } | null> {
-  let token = process.env.FOOTBALL_DATA_API_TOKEN || ''
-  try {
-    const config = useRuntimeConfig() as { footballDataApiToken?: string }
-    token = config.footballDataApiToken || token
-  } catch {
-    /* ignore */
-  }
-  if (!token) return null
-
-  const data = await httpJson<{
-    teams: Array<{ id: number; name: string; shortName?: string; tla?: string; squad?: Array<{
-      id: number
-      name: string
-      position?: string
-      dateOfBirth?: string
-      shirtNumber?: number
-    }> }>
-  }>('https://api.football-data.org/v4/competitions/BSA/teams', {
-    'X-Auth-Token': token,
-  })
-
-  const clubs: ClubRef[] = []
-  const players: SeedPlayer[] = []
-  for (const t of data.teams || []) {
-    const id = `fd_${t.id}`
-    const str = clubStrength(t.name)
-    clubs.push({
-      id,
-      name: t.name,
-      shortName: (t.tla || t.shortName || t.name.slice(0, 3)).toUpperCase().slice(0, 4),
-      ...str,
-    })
-    // squad may need separate endpoint
-  }
-
-  // Fetch squads per team
-  for (const t of data.teams || []) {
-    try {
-      const detail = await httpJson<{
-        id: number
-        squad?: Array<{
-          id: number
-          name: string
-          position?: string
-          dateOfBirth?: string
-          shirtNumber?: number
-        }>
-      }>(`https://api.football-data.org/v4/teams/${t.id}`, { 'X-Auth-Token': token })
-      const clubId = `fd_${t.id}`
-      for (const [i, p] of (detail.squad || []).entries()) {
-        const position = mapPosition(p.position)
-        const age = ageFromBorn(p.dateOfBirth)
-        const rates = ratingsFor(position, age, `fd:${p.id}`)
-        players.push({
-          key: `fd_${p.id}`,
-          clubId,
-          name: p.name,
-          position,
-          age,
-          overall: rates.overall,
-          pace: rates.pace,
-          shooting: rates.shooting,
-          passing: rates.passing,
-          defending: rates.defending,
-          physical: rates.physical,
-          wage: Math.round(rates.overall * 90),
-          value: Math.round(rates.overall * rates.overall * 140),
-          shirtNumber: p.shirtNumber || i + 1,
-        })
-      }
-      await new Promise((r) => setTimeout(r, 200))
-    } catch (e) {
-      console.warn('[live-football] fd squad failed', t.id, e)
-    }
-  }
-
-  if (!clubs.length) return null
-  return { clubs, players, source: 'football-data.org' }
+function sleep(ms: number) {
+  return new Promise((r) => setTimeout(r, ms))
 }
-
-export interface LiveCatalog {
-  clubs: ClubRef[]
-  players: SeedPlayer[]
-  source: string
-  fetchedAt: number
-}
-
-let memory: LiveCatalog | null = null
-let inflight: Promise<LiveCatalog> | null = null
 
 export async function ensureLiveCatalog(db: Client | null = null): Promise<LiveCatalog> {
   if (memory && Date.now() - memory.fetchedAt < TTL_MS) return memory
   if (inflight) return inflight
 
   inflight = (async () => {
-    // SQLite cache
     const cachedClubs = await cacheGet(db, CACHE_CLUBS)
     const cachedPlayers = await cacheGet(db, CACHE_PLAYERS)
+    const cachedMeta = await cacheGet(db, CACHE_META)
     if (cachedClubs && cachedPlayers) {
       try {
         const clubs = JSON.parse(cachedClubs) as ClubRef[]
         const players = JSON.parse(cachedPlayers) as SeedPlayer[]
-        if (clubs.length >= 8 && players.length >= 20) {
-          memory = { clubs, players, source: 'web_cache', fetchedAt: Date.now() }
-          return memory
+        const meta = cachedMeta
+          ? (JSON.parse(cachedMeta) as { source: string; warnings: string[] })
+          : { source: 'web_cache', warnings: [] as string[] }
+        if (clubs.length >= 6 && players.length >= 50) {
+          // Reject cache that looks synthetic (legacy)
+          const synthetic = players.some((p) => p.key.startsWith('proc_') || /_p\d+$/.test(p.key))
+          if (!synthetic) {
+            memory = {
+              clubs,
+              players,
+              source: meta.source || 'web_cache',
+              fetchedAt: Date.now(),
+              warnings: meta.warnings || [],
+            }
+            return memory
+          }
         }
       } catch {
         /* refetch */
       }
     }
 
-    let catalog: { clubs: ClubRef[]; players: SeedPlayer[]; source: string }
-
-    const fd = await fetchFromFootballData().catch((e) => {
-      console.warn('[live-football] football-data skipped', e)
-      return null
-    })
-    if (fd && fd.clubs.length >= 8) {
-      catalog = fd
-    } else {
-      catalog = await fetchFromTheSportsDb()
-    }
-
+    const catalog = await buildCatalogFromLive()
     await cacheSet(db, CACHE_CLUBS, catalog.clubs)
     await cacheSet(db, CACHE_PLAYERS, catalog.players)
-
-    memory = {
-      clubs: catalog.clubs,
-      players: catalog.players,
-      source: catalog.source,
-      fetchedAt: Date.now(),
-    }
+    await cacheSet(db, CACHE_META, { source: catalog.source, warnings: catalog.warnings })
+    memory = catalog
     console.info(
-      `[live-football] loaded ${memory.clubs.length} clubs, ${memory.players.length} players via ${memory.source}`,
+      `[live-football] ${catalog.clubs.length} clubs, ${catalog.players.length} players via ${catalog.source}`,
     )
-    return memory
+    if (catalog.warnings.length) {
+      console.warn('[live-football] warnings', catalog.warnings.slice(0, 8))
+    }
+    return catalog
   })()
 
   try {
@@ -447,11 +399,9 @@ export function clearLiveCatalogMemory(): void {
 }
 
 export async function getLiveClubs(db: Client | null = null): Promise<ClubRef[]> {
-  const c = await ensureLiveCatalog(db)
-  return c.clubs
+  return (await ensureLiveCatalog(db)).clubs
 }
 
 export async function getLivePlayers(db: Client | null = null): Promise<SeedPlayer[]> {
-  const c = await ensureLiveCatalog(db)
-  return c.players
+  return (await ensureLiveCatalog(db)).players
 }

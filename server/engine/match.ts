@@ -49,6 +49,8 @@ export interface MatchSide {
   midfield: number
   defense: number
   goalkeeping: number
+  /** Real player names from live roster (required for non-empty commentary). */
+  players?: string[]
 }
 
 export interface MatchEvent {
@@ -202,28 +204,12 @@ function describe(
   return map[type] ?? { pt: `${type} — ${teamName}`, en: `${type} — ${teamName}` }
 }
 
-const NAMES = [
-  'Silva',
-  'Santos',
-  'Oliveira',
-  'Souza',
-  'Lima',
-  'Costa',
-  'Ferreira',
-  'Almeida',
-  'Ribeiro',
-  'Carvalho',
-  'Gomes',
-  'Martins',
-  'Rocha',
-  'Barbosa',
-  'Dias',
-  'Nunes',
-  'Moreira',
-  'Teixeira',
-  'Mendes',
-  'Araujo',
-]
+function roster(side: MatchSide): string[] {
+  const list = (side.players || []).map((n) => n.trim()).filter(Boolean)
+  if (list.length >= 2) return list
+  // Last resort: use club name only (never invent person names)
+  return [side.name]
+}
 
 export function simulateMatch(
   seed: string,
@@ -234,6 +220,8 @@ export function simulateMatch(
   let homeGoals = 0
   let awayGoals = 0
   const events: MatchEvent[] = []
+  const homeRoster = roster(home)
+  const awayRoster = roster(away)
 
   const push = (partial: Omit<MatchEvent, 'id' | 'real_ts_ms' | 'home_score' | 'away_score'>) => {
     events.push(
@@ -285,8 +273,10 @@ export function simulateMatch(
     const team: 'home' | 'away' = rng.chance(homeChance) ? 'home' : 'away'
     const side = team === 'home' ? home : away
     const opp = team === 'home' ? away : home
-    const player = rng.pick(NAMES)
-    const other = rng.pick(NAMES)
+    const sideRoster = team === 'home' ? homeRoster : awayRoster
+    const oppRoster = team === 'home' ? awayRoster : homeRoster
+    const player = rng.pick(sideRoster)
+    const other = rng.pick(oppRoster)
 
     // Goal attempt based on xG share
     const teamXg = team === 'home' ? xgHome : xgAway

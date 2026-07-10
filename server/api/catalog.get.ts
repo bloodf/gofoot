@@ -12,7 +12,18 @@ export default defineEventHandler(async () => {
     fetchedAt: cat.fetchedAt,
     clubs: cat.clubs.length,
     players: cat.players.length,
-    sampleClubs: cat.clubs.slice(0, 5).map((c) => c.name),
+    sampleClubs: cat.clubs.slice(0, 8).map((c) => ({
+      id: c.id,
+      name: c.name,
+      players: cat.players.filter((p) => p.clubId === c.id).length,
+    })),
+    samplePlayers: cat.players.slice(0, 12).map((p) => ({
+      name: p.name,
+      clubId: p.clubId,
+      position: p.position,
+      shirt: p.shirtNumber,
+    })),
+    warnings: (cat as { warnings?: string[] }).warnings ?? [],
     meta: catalogMeta(),
   }
 })

@@ -18,6 +18,9 @@ import { chainLink, GENESIS_HASH, hmacHex } from './hmac'
 
 function sideFromClub(clubId: string): MatchSide {
   const c = clubById(clubId)
+  const roster = loadPlayers()
+    .filter((p) => p.clubId === clubId)
+    .map((p) => p.name)
   if (!c) {
     return {
       clubId,
@@ -26,6 +29,7 @@ function sideFromClub(clubId: string): MatchSide {
       midfield: 60,
       defense: 60,
       goalkeeping: 60,
+      players: roster.length ? roster : [clubId],
     }
   }
   return {
@@ -35,6 +39,7 @@ function sideFromClub(clubId: string): MatchSide {
     midfield: c.midfield,
     defense: c.defense,
     goalkeeping: c.goalkeeping,
+    players: roster.length ? roster : [c.name],
   }
 }
 
@@ -352,25 +357,7 @@ export async function endSeason(
     }
   }
 
-  // Youth intake
-  const rng = createRng(`${sessionId}:youth:${season + 1}`)
-  const positions = ['GK', 'CB', 'CM', 'ST', 'LW']
-  const names = ['Silva', 'Santos', 'Lima', 'Costa', 'Souza']
-  for (let i = 0; i < 3; i++) {
-    await db.execute({
-      sql: `INSERT INTO youth_players (id, session_id, name, position, age, potential, overall, status)
-        VALUES (?, ?, ?, ?, ?, ?, ?, 'academy')`,
-      args: [
-        randomUUID(),
-        sessionId,
-        `${rng.pick(['João', 'Pedro', 'Lucas'])} ${rng.pick(names)}`,
-        rng.pick(positions),
-        16 + rng.int(0, 2),
-        60 + rng.int(0, 25),
-        45 + rng.int(0, 15),
-      ],
-    })
-  }
+  // Youth: do not invent names. Promote from live catalog U21 players not already in squad later.
 
   await db.execute({
     sql: `UPDATE career_state SET division=?, season=?, reputation=?, board_confidence=?, cash=?, season_day=1, updated_at=?

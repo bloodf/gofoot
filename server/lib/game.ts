@@ -134,32 +134,12 @@ export async function ensureCareer(db: Client, sessionId: string, secret: string
     ],
   })
 
-  // Default tactics + starter academy
+  // Default tactics (youth filled only from live youth endpoints later — never invented names)
   await db.execute({
     sql: `INSERT INTO tactics (session_id, formation, mentality, pressing, tempo, width)
       VALUES (?, '4-3-3', 'balanced', 50, 50, 50)`,
     args: [sessionId],
   })
-  const youthRows: Array<{ name: string; pos: string }> = [
-    { name: 'João', pos: 'CM' },
-    { name: 'Pedro', pos: 'ST' },
-    { name: 'Lucas', pos: 'CB' },
-  ]
-  for (const [i, y] of youthRows.entries()) {
-    await db.execute({
-      sql: `INSERT INTO youth_players (id, session_id, name, position, age, potential, overall, status)
-        VALUES (?, ?, ?, ?, ?, ?, ?, 'academy')`,
-      args: [
-        randomUUID(),
-        sessionId,
-        `${y.name} ${rng.pick(['Silva', 'Santos', 'Lima'])}`,
-        y.pos,
-        16 + i,
-        65 + rng.int(0, 20),
-        48 + rng.int(0, 12),
-      ],
-    })
-  }
 
   // Genesis snapshot
   const payload = JSON.stringify({ type: 'career.started', clubId: club.id, division })
@@ -173,6 +153,9 @@ export async function ensureCareer(db: Client, sessionId: string, secret: string
 
 function sideFromClub(clubId: string): MatchSide {
   const c = clubById(clubId)
+  const roster = playersForClub(clubId)
+    .filter((p) => p.position !== 'COACH')
+    .map((p) => p.name)
   if (!c) {
     return {
       clubId,
@@ -181,6 +164,7 @@ function sideFromClub(clubId: string): MatchSide {
       midfield: 60,
       defense: 60,
       goalkeeping: 60,
+      players: roster.length ? roster : [clubId],
     }
   }
   return {
@@ -190,6 +174,7 @@ function sideFromClub(clubId: string): MatchSide {
     midfield: c.midfield,
     defense: c.defense,
     goalkeeping: c.goalkeeping,
+    players: roster.length ? roster : [c.name],
   }
 }
 
