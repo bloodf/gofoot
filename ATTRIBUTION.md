@@ -18,7 +18,13 @@
 | lucide-vue-next | lucide.dev | ISC |
 | Vitest, Playwright | vitest.dev, playwright.dev | MIT |
 | @vite-pwa/nuxt | vite-pwa-org | MIT |
-| @nuxtjs/i18n, supabase, etc. | community modules | MIT |
+| @nuxtjs/i18n | nuxt.com modules | MIT |
+| @libsql/client | turso.tech | MIT |
+| idb-keyval | npm | Apache-2.0 |
+
+## Sponsors registry
+
+Fictional sponsors only — see `data/joke-brands.json` (never real brands).
 
 ---
 

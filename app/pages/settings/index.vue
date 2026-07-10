@@ -36,6 +36,9 @@
       </NuxtLink>
       <NuxtLink to="/fantasy" class="tap-target flex items-center text-sm">Fantasy</NuxtLink>
       <NuxtLink to="/club/finance" class="tap-target flex items-center text-sm">Finanças</NuxtLink>
+      <NuxtLink to="/patches" class="tap-target flex items-center text-sm">Patches</NuxtLink>
+      <NuxtLink to="/club/tactics" class="tap-target flex items-center text-sm">Táticas</NuxtLink>
+      <NuxtLink to="/club/transfers" class="tap-target flex items-center text-sm">Transferências</NuxtLink>
     </section>
   </div>
 </template>

@@ -27,9 +27,30 @@
       </li>
     </ol>
 
-    <UButton to="/leagues/serie_d" class="tap-target min-h-11" block color="primary" variant="soft">
-      {{ t('career.viewTable') }}
-    </UButton>
+    <div class="flex flex-col gap-2">
+      <UButton to="/leagues/serie_d" class="tap-target min-h-11" block color="primary" variant="soft">
+        {{ t('career.viewTable') }}
+      </UButton>
+      <UButton
+        class="tap-target min-h-11"
+        block
+        color="primary"
+        :loading="advancing"
+        @click="advance('rest_of_season')"
+      >
+        {{ t('career.simSeason') }}
+      </UButton>
+      <UButton
+        to="/leagues/serie_d/cup/copa_do_brasil"
+        class="tap-target min-h-11"
+        block
+        color="gray"
+        variant="soft"
+      >
+        {{ t('career.cup') }}
+      </UButton>
+    </div>
+    <p v-if="msg" class="text-sm text-gofoot-accent">{{ msg }}</p>
   </div>
 </template>
 
@@ -43,9 +64,30 @@ const data = ref<{
   season?: number
   rungs: Array<{ id: string; unlocked: boolean; current: boolean }>
 } | null>(null)
+const advancing = ref(false)
+const msg = ref('')
 
-onMounted(async () => {
+async function refresh() {
   await load()
   data.value = await api('/api/career')
-})
+}
+
+async function advance(mode: string) {
+  advancing.value = true
+  msg.value = ''
+  try {
+    const r = await api<{ simulated: number; promoted?: string | null }>('/api/career/advance', {
+      method: 'POST',
+      body: { mode },
+    })
+    msg.value = r.promoted
+      ? `${t('career.promoted')} ${r.promoted} (${r.simulated} jogos)`
+      : `${r.simulated} jogos simulados`
+    await refresh()
+  } finally {
+    advancing.value = false
+  }
+}
+
+onMounted(refresh)
 </script>

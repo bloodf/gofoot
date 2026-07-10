@@ -1,127 +1,855 @@
 {
   "$schema": "https://gofoot.app/schemas/joke-brands/v1.json",
-  "version": "0.1.0",
+  "version": "1.0.0",
   "description": "Fictional Brazilian meme brands only. CI forbids real brand strings outside this file.",
   "brands": [
     {
       "id": "tabajara",
       "name": "Indústrias Tabajara",
       "tier": "national",
-      "categories": ["conglomerate"]
+      "categories": [
+        "conglomerate"
+      ]
     },
     {
       "id": "agua-em-po-birigui",
       "name": "Água em Pó Birigui",
       "tier": "regional",
-      "categories": ["beverage"]
+      "categories": [
+        "beverage"
+      ]
     },
     {
       "id": "apostano",
       "name": "Apostano",
       "tier": "national",
-      "categories": ["betting_parody"]
+      "categories": [
+        "betting_parody"
+      ]
     },
     {
       "id": "casas-bacia",
       "name": "Casas Bacia",
       "tier": "national",
-      "categories": ["retail"]
+      "categories": [
+        "retail"
+      ]
     },
     {
       "id": "sabonete-cacique-indalino",
       "name": "Sabonete Cacique Indalino",
       "tier": "regional",
-      "categories": ["hygiene"]
+      "categories": [
+        "hygiene"
+      ]
     },
     {
       "id": "geladeira-posto-soares",
       "name": "Geladeira do Posto Soares",
       "tier": "local",
-      "categories": ["food"]
+      "categories": [
+        "food"
+      ]
     },
     {
       "id": "banco-do-nada",
       "name": "Banco do Nada",
       "tier": "national",
-      "categories": ["finance"]
+      "categories": [
+        "finance"
+      ]
     },
     {
       "id": "telepato-tv",
       "name": "Telepato TV",
       "tier": "national",
-      "categories": ["media"]
+      "categories": [
+        "media"
+      ]
     },
     {
       "id": "churrasquinho-do-ze",
       "name": "Churrasquinho do Zé",
       "tier": "local",
-      "categories": ["food"]
+      "categories": [
+        "food"
+      ]
     },
     {
       "id": "oleo-de-peroba",
       "name": "Óleo de Peroba Premium",
       "tier": "regional",
-      "categories": ["household"]
+      "categories": [
+        "household"
+      ]
     },
     {
       "id": "seguro-quebrou",
       "name": "Seguro Quebrou-Pagou",
       "tier": "national",
-      "categories": ["insurance"]
+      "categories": [
+        "insurance"
+      ]
     },
     {
       "id": "pastel-de-vento",
       "name": "Pastel de Vento Express",
       "tier": "local",
-      "categories": ["food"]
+      "categories": [
+        "food"
+      ]
     },
     {
       "id": "moto-sem-guidao",
       "name": "Moto Sem Guidão",
       "tier": "regional",
-      "categories": ["transport"]
+      "categories": [
+        "transport"
+      ]
     },
     {
       "id": "escola-de-samba-virtual",
       "name": "Escola de Samba Virtual",
       "tier": "national",
-      "categories": ["entertainment"]
+      "categories": [
+        "entertainment"
+      ]
     },
     {
       "id": "cafe-com-pao-dormido",
       "name": "Café com Pão Dormido",
       "tier": "local",
-      "categories": ["food"]
+      "categories": [
+        "food"
+      ]
     },
     {
       "id": "academia-peito-de-aco",
       "name": "Academia Peito de Aço",
       "tier": "regional",
-      "categories": ["fitness"]
+      "categories": [
+        "fitness"
+      ]
     },
     {
       "id": "farmacia-toma-que-passa",
       "name": "Farmácia Toma Que Passa",
       "tier": "local",
-      "categories": ["health"]
+      "categories": [
+        "health"
+      ]
     },
     {
       "id": "construtora-caiu-mas-levantou",
       "name": "Construtora Caiu Mas Levantou",
       "tier": "regional",
-      "categories": ["construction"]
+      "categories": [
+        "construction"
+      ]
     },
     {
       "id": "energia-apaga-as-vezes",
       "name": "Energia Apaga Às Vezes",
       "tier": "national",
-      "categories": ["utilities"]
+      "categories": [
+        "utilities"
+      ]
     },
     {
       "id": "app-de-fila",
       "name": "FilaJá App",
       "tier": "national",
-      "categories": ["tech"]
+      "categories": [
+        "tech"
+      ]
+    },
+    {
+      "id": "fogao-quebrado",
+      "name": "Fogão Quebrado Express",
+      "tier": "local",
+      "categories": [
+        "appliance"
+      ]
+    },
+    {
+      "id": "banco-sem-senha",
+      "name": "Banco Sem Senha",
+      "tier": "national",
+      "categories": [
+        "finance"
+      ]
+    },
+    {
+      "id": "chapeu-de-couro-digital",
+      "name": "Chapéu de Couro Digital",
+      "tier": "regional",
+      "categories": [
+        "fashion"
+      ]
+    },
+    {
+      "id": "moto-taxi-do-alemao",
+      "name": "Moto Táxi do Alemão",
+      "tier": "local",
+      "categories": [
+        "transport"
+      ]
+    },
+    {
+      "id": "sorvete-derrete-ja",
+      "name": "Sorvete Derrete Já",
+      "tier": "regional",
+      "categories": [
+        "food"
+      ]
+    },
+    {
+      "id": "plano-de-saude-talvez",
+      "name": "Plano de Saúde Talvez",
+      "tier": "national",
+      "categories": [
+        "health"
+      ]
+    },
+    {
+      "id": "escola-de-futebol-pelada",
+      "name": "Escola de Futebol Pelada",
+      "tier": "local",
+      "categories": [
+        "sports"
+      ]
+    },
+    {
+      "id": "cerveja-sem-alcool-com-alcool",
+      "name": "Cerveja Sem Álcool Com Álcool",
+      "tier": "national",
+      "categories": [
+        "beverage"
+      ]
+    },
+    {
+      "id": "tv-a-cabo-sem-cabo",
+      "name": "TV a Cabo Sem Cabo",
+      "tier": "national",
+      "categories": [
+        "media"
+      ]
+    },
+    {
+      "id": "lavanderia-lava-jato-legal",
+      "name": "Lavanderia Lava Jato Legal",
+      "tier": "local",
+      "categories": [
+        "services"
+      ]
+    },
+    {
+      "id": "hotel-cinco-estrelas-cadentes",
+      "name": "Hotel Cinco Estrelas Cadentes",
+      "tier": "regional",
+      "categories": [
+        "travel"
+      ]
+    },
+    {
+      "id": "agencia-de-viagem-fica-em-casa",
+      "name": "Agência Fica Em Casa",
+      "tier": "national",
+      "categories": [
+        "travel"
+      ]
+    },
+    {
+      "id": "consultoria-achismo",
+      "name": "Consultoria Achismo Ltda",
+      "tier": "national",
+      "categories": [
+        "tech"
+      ]
+    },
+    {
+      "id": "startup-unicornio-sem-chifre",
+      "name": "Startup Unicórnio Sem Chifre",
+      "tier": "national",
+      "categories": [
+        "tech"
+      ]
+    },
+    {
+      "id": "delivery-demora-mesmo",
+      "name": "Delivery Demora Mesmo",
+      "tier": "regional",
+      "categories": [
+        "food"
+      ]
+    },
+    {
+      "id": "academia-sofa-fit",
+      "name": "Academia Sofá Fit",
+      "tier": "local",
+      "categories": [
+        "fitness"
+      ]
+    },
+    {
+      "id": "escola-de-idioma-portugues",
+      "name": "Escola de Idioma Português",
+      "tier": "regional",
+      "categories": [
+        "education"
+      ]
+    },
+    {
+      "id": "cartorio-online-offline",
+      "name": "Cartório Online Offline",
+      "tier": "national",
+      "categories": [
+        "services"
+      ]
+    },
+    {
+      "id": "imobiliaria-sonho-molhado",
+      "name": "Imobiliária Sonho Molhado",
+      "tier": "regional",
+      "categories": [
+        "realestate"
+      ]
+    },
+    {
+      "id": "concessionaria-quase-zero",
+      "name": "Concessionária Quase Zero",
+      "tier": "regional",
+      "categories": [
+        "auto"
+      ]
+    },
+    {
+      "id": "farmacia-generico-premium",
+      "name": "Farmácia Genérico Premium",
+      "tier": "local",
+      "categories": [
+        "health"
+      ]
+    },
+    {
+      "id": "padaria-pao-amanhecido-gourmet",
+      "name": "Padaria Pão Amanhecido Gourmet",
+      "tier": "local",
+      "categories": [
+        "food"
+      ]
+    },
+    {
+      "id": "barbearia-navalha-cega",
+      "name": "Barbearia Navalha Cega",
+      "tier": "local",
+      "categories": [
+        "services"
+      ]
+    },
+    {
+      "id": "pet-shop-latido-mudo",
+      "name": "Pet Shop Latido Mudo",
+      "tier": "local",
+      "categories": [
+        "retail"
+      ]
+    },
+    {
+      "id": "loja-de-calcado-pe-torto",
+      "name": "Loja de Calçado Pé Torto",
+      "tier": "regional",
+      "categories": [
+        "retail"
+      ]
+    },
+    {
+      "id": "supermercado-preco-misterio",
+      "name": "Supermercado Preço Mistério",
+      "tier": "national",
+      "categories": [
+        "retail"
+      ]
+    },
+    {
+      "id": "posto-gasolina-agua",
+      "name": "Posto Gasolina Água",
+      "tier": "regional",
+      "categories": [
+        "utilities"
+      ]
+    },
+    {
+      "id": "energia-solar-nublada",
+      "name": "Energia Solar Nublada",
+      "tier": "national",
+      "categories": [
+        "utilities"
+      ]
+    },
+    {
+      "id": "internet-banda-larga-estreita",
+      "name": "Internet Banda Larga Estreita",
+      "tier": "national",
+      "categories": [
+        "tech"
+      ]
+    },
+    {
+      "id": "celular-trinca-facil",
+      "name": "Celular Trinca Fácil",
+      "tier": "national",
+      "categories": [
+        "tech"
+      ]
+    },
+    {
+      "id": "seguros-nao-cobre",
+      "name": "Seguros Não Cobre",
+      "tier": "national",
+      "categories": [
+        "insurance"
+      ]
+    },
+    {
+      "id": "bingo-da-sorte-azarada",
+      "name": "Bingo da Sorte Azarada",
+      "tier": "regional",
+      "categories": [
+        "entertainment"
+      ]
+    },
+    {
+      "id": "teatro-plateia-vazia",
+      "name": "Teatro Plateia Vazia",
+      "tier": "local",
+      "categories": [
+        "entertainment"
+      ]
+    },
+    {
+      "id": "cinema-ingresso-caro-barato",
+      "name": "Cinema Ingresso Caro Barato",
+      "tier": "regional",
+      "categories": [
+        "entertainment"
+      ]
+    },
+    {
+      "id": "parque-diversao-sem-diversao",
+      "name": "Parque Diversão Sem Diversão",
+      "tier": "regional",
+      "categories": [
+        "entertainment"
+      ]
+    },
+    {
+      "id": "zoo-sem-animais",
+      "name": "Zoológico Conceitual",
+      "tier": "local",
+      "categories": [
+        "entertainment"
+      ]
+    },
+    {
+      "id": "museu-do-nada",
+      "name": "Museu do Nada",
+      "tier": "local",
+      "categories": [
+        "culture"
+      ]
+    },
+    {
+      "id": "biblioteca-sem-livro",
+      "name": "Biblioteca Sem Livro Café",
+      "tier": "local",
+      "categories": [
+        "culture"
+      ]
+    },
+    {
+      "id": "editora-best-seller-nunca",
+      "name": "Editora Best Seller Nunca",
+      "tier": "national",
+      "categories": [
+        "media"
+      ]
+    },
+    {
+      "id": "jornalista-achou-que",
+      "name": "Jornal Achou Que",
+      "tier": "national",
+      "categories": [
+        "media"
+      ]
+    },
+    {
+      "id": "radio-sem-sinal",
+      "name": "Rádio Sem Sinal FM",
+      "tier": "regional",
+      "categories": [
+        "media"
+      ]
+    },
+    {
+      "id": "podcast-dormir-acordado",
+      "name": "Podcast Dormir Acordado",
+      "tier": "national",
+      "categories": [
+        "media"
+      ]
+    },
+    {
+      "id": "influenciador-sem-seguidor",
+      "name": "Influenciador Sem Seguidor",
+      "tier": "national",
+      "categories": [
+        "tech"
+      ]
+    },
+    {
+      "id": "crypto-moeda-de-chocolate",
+      "name": "Crypto Moeda de Chocolate",
+      "tier": "national",
+      "categories": [
+        "finance"
+      ]
+    },
+    {
+      "id": "fintech-sem-fin",
+      "name": "Fintech Sem Fin",
+      "tier": "national",
+      "categories": [
+        "finance"
+      ]
+    },
+    {
+      "id": "corretora-sobe-desce",
+      "name": "Corretora Sobe e Desce",
+      "tier": "national",
+      "categories": [
+        "finance"
+      ]
+    },
+    {
+      "id": "fundo-de-investimento-buraco",
+      "name": "Fundo Buraco Negro",
+      "tier": "national",
+      "categories": [
+        "finance"
+      ]
+    },
+    {
+      "id": "consorcio-da-paciencia",
+      "name": "Consórcio da Paciência",
+      "tier": "national",
+      "categories": [
+        "finance"
+      ]
+    },
+    {
+      "id": "emprestimo-amigo-falso",
+      "name": "Empréstimo Amigo Falso",
+      "tier": "regional",
+      "categories": [
+        "finance"
+      ]
+    },
+    {
+      "id": "factor-salgado-doce",
+      "name": "Factor Salgado Doce",
+      "tier": "national",
+      "categories": [
+        "finance"
+      ]
+    },
+    {
+      "id": "logistica-extraviou",
+      "name": "Logística Extraviou Já",
+      "tier": "national",
+      "categories": [
+        "transport"
+      ]
+    },
+    {
+      "id": "transporte-coletivo-individual",
+      "name": "Transporte Coletivo Individual",
+      "tier": "regional",
+      "categories": [
+        "transport"
+      ]
+    },
+    {
+      "id": "aviacao-charter-chao",
+      "name": "Aviação Charter Chão",
+      "tier": "national",
+      "categories": [
+        "transport"
+      ]
+    },
+    {
+      "id": "navio-cruzeiro-seca",
+      "name": "Navio Cruzeiro Seca",
+      "tier": "national",
+      "categories": [
+        "travel"
+      ]
+    },
+    {
+      "id": "camping-cinco-estrelas",
+      "name": "Camping Cinco Estrelas",
+      "tier": "regional",
+      "categories": [
+        "travel"
+      ]
+    },
+    {
+      "id": "spa-relaxa-se-conseguir",
+      "name": "Spa Relaxa Se Conseguir",
+      "tier": "regional",
+      "categories": [
+        "health"
+      ]
+    },
+    {
+      "id": "clinica-estetica-natural",
+      "name": "Clínica Estética Natural Demais",
+      "tier": "regional",
+      "categories": [
+        "health"
+      ]
+    },
+    {
+      "id": "laboratorio-resultado-surpresa",
+      "name": "Laboratório Resultado Surpresa",
+      "tier": "national",
+      "categories": [
+        "health"
+      ]
+    },
+    {
+      "id": "hospital-fila-unica-infinita",
+      "name": "Hospital Fila Única Infinita",
+      "tier": "national",
+      "categories": [
+        "health"
+      ]
+    },
+    {
+      "id": "dentista-sorriso-amarelo",
+      "name": "Dentista Sorriso Amarelo",
+      "tier": "local",
+      "categories": [
+        "health"
+      ]
+    },
+    {
+      "id": "otica-enxerga-longe",
+      "name": "Ótica Enxerga Longe",
+      "tier": "local",
+      "categories": [
+        "retail"
+      ]
+    },
+    {
+      "id": "relojoaria-atrasada",
+      "name": "Relojoaria Atrasada",
+      "tier": "local",
+      "categories": [
+        "retail"
+      ]
+    },
+    {
+      "id": "joalheria-bijuteria-premium",
+      "name": "Joalheria Bijuteria Premium",
+      "tier": "regional",
+      "categories": [
+        "retail"
+      ]
+    },
+    {
+      "id": "loja-de-roupa-tamanho-unico",
+      "name": "Loja Tamanho Único Elástico",
+      "tier": "regional",
+      "categories": [
+        "fashion"
+      ]
+    },
+    {
+      "id": "alfaiate-quase-certo",
+      "name": "Alfaiate Quase Certo",
+      "tier": "local",
+      "categories": [
+        "fashion"
+      ]
+    },
+    {
+      "id": "lavanderia-a-seco-molhado",
+      "name": "Lavanderia a Seco Molhado",
+      "tier": "local",
+      "categories": [
+        "services"
+      ]
+    },
+    {
+      "id": "chaveiro-abre-tudo-quase",
+      "name": "Chaveiro Abre Tudo Quase",
+      "tier": "local",
+      "categories": [
+        "services"
+      ]
+    },
+    {
+      "id": "eletricista-choque-gratis",
+      "name": "Eletricista Choque Grátis",
+      "tier": "local",
+      "categories": [
+        "services"
+      ]
+    },
+    {
+      "id": "encanador-goteira-fixa",
+      "name": "Encanador Goteira Fixa",
+      "tier": "local",
+      "categories": [
+        "services"
+      ]
+    },
+    {
+      "id": "pintor-cor-surpresa",
+      "name": "Pintor Cor Surpresa",
+      "tier": "local",
+      "categories": [
+        "services"
+      ]
+    },
+    {
+      "id": "arquiteto-planta-baixa-alta",
+      "name": "Arquiteto Planta Baixa Alta",
+      "tier": "regional",
+      "categories": [
+        "construction"
+      ]
+    },
+    {
+      "id": "empreiteira-prazo-elastico",
+      "name": "Empreiteira Prazo Elástico",
+      "tier": "regional",
+      "categories": [
+        "construction"
+      ]
+    },
+    {
+      "id": "materiais-de-construcao-quase",
+      "name": "Materiais Quase Novos",
+      "tier": "regional",
+      "categories": [
+        "construction"
+      ]
+    },
+    {
+      "id": "ferragem-parafuso-solto",
+      "name": "Ferragem Parafuso Solto",
+      "tier": "local",
+      "categories": [
+        "retail"
+      ]
+    },
+    {
+      "id": "agro-sementes-milagre",
+      "name": "Agro Sementes Milagre",
+      "tier": "national",
+      "categories": [
+        "agro"
+      ]
+    },
+    {
+      "id": "cooperativa-sozinho",
+      "name": "Cooperativa Sozinho",
+      "tier": "regional",
+      "categories": [
+        "agro"
+      ]
+    },
+    {
+      "id": "frigorifico-vegetariano",
+      "name": "Frigorífico Vegetariano",
+      "tier": "national",
+      "categories": [
+        "food"
+      ]
+    },
+    {
+      "id": "laticinio-leite-de-pedra",
+      "name": "Laticínio Leite de Pedra",
+      "tier": "regional",
+      "categories": [
+        "food"
+      ]
+    },
+    {
+      "id": "acucar-doce-amargo",
+      "name": "Açúcar Doce Amargo",
+      "tier": "national",
+      "categories": [
+        "food"
+      ]
+    },
+    {
+      "id": "cafe-torrado-duas-vezes",
+      "name": "Café Torrado Duas Vezes",
+      "tier": "national",
+      "categories": [
+        "food"
+      ]
+    },
+    {
+      "id": "cha-gelado-quente",
+      "name": "Chá Gelado Quente",
+      "tier": "regional",
+      "categories": [
+        "beverage"
+      ]
+    },
+    {
+      "id": "refrigerante-sem-gas-com-gas",
+      "name": "Refrigerante Sem Gás Com Gás",
+      "tier": "national",
+      "categories": [
+        "beverage"
+      ]
+    },
+    {
+      "id": "agua-mineral-da-torneira",
+      "name": "Água Mineral da Torneira",
+      "tier": "local",
+      "categories": [
+        "beverage"
+      ]
+    },
+    {
+      "id": "suco-natural-artificial",
+      "name": "Suco Natural Artificial",
+      "tier": "regional",
+      "categories": [
+        "beverage"
+      ]
+    },
+    {
+      "id": "vinho-da-casa-do-vizinho",
+      "name": "Vinho da Casa do Vizinho",
+      "tier": "regional",
+      "categories": [
+        "beverage"
+      ]
+    },
+    {
+      "id": "cachaca-artesanal-industrial",
+      "name": "Cachaça Artesanal Industrial",
+      "tier": "national",
+      "categories": [
+        "beverage"
+      ]
     }
   ]
 }

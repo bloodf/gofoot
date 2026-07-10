@@ -1,0 +1,87 @@
+{
+  "generatedAt": "2026-07-10T02:02:26.743Z",
+  "clubCount": 20,
+  "playerCount": 320,
+  "byClub": {
+    "fla": {
+      "name": "Flamengo",
+      "players": 16
+    },
+    "pal": {
+      "name": "Palmeiras",
+      "players": 16
+    },
+    "cor": {
+      "name": "Corinthians",
+      "players": 16
+    },
+    "sao": {
+      "name": "São Paulo",
+      "players": 16
+    },
+    "san": {
+      "name": "Santos",
+      "players": 16
+    },
+    "gre": {
+      "name": "Grêmio",
+      "players": 16
+    },
+    "int": {
+      "name": "Internacional",
+      "players": 16
+    },
+    "atl": {
+      "name": "Atlético Mineiro",
+      "players": 16
+    },
+    "cru": {
+      "name": "Cruzeiro",
+      "players": 16
+    },
+    "bot": {
+      "name": "Botafogo",
+      "players": 16
+    },
+    "vas": {
+      "name": "Vasco",
+      "players": 16
+    },
+    "flu": {
+      "name": "Fluminense",
+      "players": 16
+    },
+    "bah": {
+      "name": "Bahia",
+      "players": 16
+    },
+    "vit": {
+      "name": "Vitória",
+      "players": 16
+    },
+    "cea": {
+      "name": "Ceará",
+      "players": 16
+    },
+    "for": {
+      "name": "Fortaleza",
+      "players": 16
+    },
+    "cap": {
+      "name": "Athletico-PR",
+      "players": 16
+    },
+    "cui": {
+      "name": "Cuiabá",
+      "players": 16
+    },
+    "goias": {
+      "name": "Goiás",
+      "players": 16
+    },
+    "ava": {
+      "name": "Avaí",
+      "players": 16
+    }
+  }
+}

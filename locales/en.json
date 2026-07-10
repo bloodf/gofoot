@@ -66,7 +66,10 @@
     "season": "Season",
     "now": "now",
     "currentHint": "Win the division to climb the ladder.",
-    "viewTable": "View table"
+    "viewTable": "View table",
+    "simSeason": "Simulate rest of season",
+    "cup": "Cup bracket",
+    "promoted": "Promoted to"
   },
   "match": {
     "waiting": "Tap Play to simulate (server-side).",
@@ -86,7 +89,10 @@
     "title": "Fantasy",
     "liveNow": "Live now",
     "play": "Enter",
-    "soon": "Full fantasy sync in a polish pass."
+    "soon": "",
+    "pickClub": "Pick a club",
+    "pts": "Points",
+    "nextMatch": "Play next match"
   },
   "finance": {
     "title": "Finance",
@@ -117,5 +123,46 @@
     "session": "Session",
     "manageSession": "Manage session token",
     "audit": "View audit chain"
+  },
+  "tactics": {
+    "title": "Tactics",
+    "pitch": "Pitch",
+    "formation": "Formation",
+    "mentality": "Mentality",
+    "pressing": "Pressing",
+    "tempo": "Tempo",
+    "width": "Width",
+    "save": "Save tactics",
+    "saved": "Tactics saved"
+  },
+  "transfers": {
+    "title": "Transfers",
+    "subtitle": "Server-side market.",
+    "buy": "Sign"
+  },
+  "training": {
+    "title": "Training & Youth",
+    "subtitle": "Promote academy gems.",
+    "youth": "Academy",
+    "promote": "Promote",
+    "noYouth": "No academy players — finish a season.",
+    "focus": "Weekly focus",
+    "focusHint": "Focus affects morale next attribute cycle.",
+    "promoted": "Promoted to first team!"
+  },
+  "stadium": {
+    "title": "Stadium",
+    "level": "Level"
+  },
+  "cup": {
+    "title": "Cup",
+    "sim": "Simulate",
+    "empty": "No bracket yet — end a season."
+  },
+  "patches": {
+    "title": "Patches",
+    "subtitle": "Opt-in content.",
+    "install": "Install",
+    "installed": "Installed"
   }
 }

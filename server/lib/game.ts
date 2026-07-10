@@ -7,6 +7,7 @@ import { defaultStadium, expandSector, expansionCost } from '../engine/stadium'
 import { chainLink, GENESIS_HASH, hmacHex } from './hmac'
 import { loadClubs, loadJokeBrands, playersForClub, clubById } from './data'
 import { createRng } from '../engine/rng'
+import { simRestOfMatchday } from './career-ops'
 
 export async function ensureCareer(db: Client, sessionId: string, secret: string): Promise<void> {
   const existing = await db.execute({
@@ -130,6 +131,30 @@ export async function ensureCareer(db: Client, sessionId: string, secret: string
       now,
     ],
   })
+
+  // Default tactics + starter academy
+  await db.execute({
+    sql: `INSERT INTO tactics (session_id, formation, mentality, pressing, tempo, width)
+      VALUES (?, '4-3-3', 'balanced', 50, 50, 50)`,
+    args: [sessionId],
+  })
+  const youthNames = ['João', 'Pedro', 'Lucas']
+  const youthPos = ['CM', 'ST', 'CB']
+  for (let i = 0; i < 3; i++) {
+    await db.execute({
+      sql: `INSERT INTO youth_players (id, session_id, name, position, age, potential, overall, status)
+        VALUES (?, ?, ?, ?, ?, ?, ?, 'academy')`,
+      args: [
+        randomUUID(),
+        sessionId,
+        `${youthNames[i]} ${rng.pick(['Silva', 'Santos', 'Lima'])}`,
+        youthPos[i],
+        16 + i,
+        65 + rng.int(0, 20),
+        48 + rng.int(0, 12),
+      ],
+    })
+  }
 
   // Genesis snapshot
   const payload = JSON.stringify({ type: 'career.started', clubId: club.id, division })
@@ -438,6 +463,16 @@ export async function simulateFixture(db: Client, sessionId: string, fixtureId: 
     args: [cash, sessionId],
   })
 
+  // Auto-sim other fixtures on this matchday (AI clubs)
+  const aiSimmed = await simRestOfMatchday(
+    db,
+    sessionId,
+    Number(fx.matchday),
+    competitionId,
+    secret,
+    String(career.club_id),
+  )
+
   const eventsJson = JSON.stringify(result.events)
   const hmac = hmacHex(secret, `${fixtureId}:${result.homeGoals}:${result.awayGoals}:${eventsJson}`)
   await db.execute({
@@ -490,6 +525,7 @@ export async function simulateFixture(db: Client, sessionId: string, fixtureId: 
     duration_ms_1x: result.duration_ms_1x,
     gate,
     attendance,
+    aiSimmed,
   }
 }
 

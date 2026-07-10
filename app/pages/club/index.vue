@@ -2,6 +2,19 @@
   <div class="mx-auto w-full max-w-lg space-y-3">
     <h1 class="text-lg font-semibold">{{ t('club.title') }}</h1>
     <p class="text-sm text-gray-400">{{ data?.players?.length ?? 0 }} jogadores</p>
+    <div class="flex gap-2 overflow-x-auto pb-1">
+      <UButton
+        v-for="link in links"
+        :key="link.to"
+        size="sm"
+        class="tap-target shrink-0"
+        color="primary"
+        variant="soft"
+        :to="link.to"
+      >
+        {{ link.label }}
+      </UButton>
+    </div>
 
     <ul class="divide-y divide-gray-800 rounded-xl border border-gray-800">
       <li v-for="p in data?.players ?? []" :key="p.id">
@@ -65,6 +78,14 @@ interface Player {
 
 const data = ref<{ players: Player[] } | null>(null)
 const selected = ref<Player | null>(null)
+
+const links = [
+  { to: '/club/tactics', label: 'Táticas' },
+  { to: '/club/transfers', label: 'Transferências' },
+  { to: '/club/training', label: 'Base' },
+  { to: '/club/finance', label: 'Finanças' },
+  { to: '/club/stadium', label: 'Estádio' },
+]
 
 onMounted(async () => {
   await load()

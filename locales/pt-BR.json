@@ -66,7 +66,10 @@
     "season": "Temporada",
     "now": "agora",
     "currentHint": "Ganhe a divisão para subir a escada.",
-    "viewTable": "Ver classificação"
+    "viewTable": "Ver classificação",
+    "simSeason": "Simular resto da temporada",
+    "cup": "Chave da copa",
+    "promoted": "Promovido para"
   },
   "match": {
     "waiting": "Toque em Jogar para simular (server-side).",
@@ -86,7 +89,10 @@
     "title": "Fantasy",
     "liveNow": "Ao vivo agora",
     "play": "Entrar",
-    "soon": "Fantasy full sync no próximo ciclo de polish."
+    "soon": "",
+    "pickClub": "Escolha o clube",
+    "pts": "Pontos",
+    "nextMatch": "Jogar próxima"
   },
   "finance": {
     "title": "Finanças",
@@ -117,5 +123,46 @@
     "session": "Sessão",
     "manageSession": "Gerenciar token de sessão",
     "audit": "Ver cadeia de auditoria"
+  },
+  "tactics": {
+    "title": "Táticas",
+    "pitch": "Campo",
+    "formation": "Formação",
+    "mentality": "Mentalidade",
+    "pressing": "Pressing",
+    "tempo": "Ritmo",
+    "width": "Amplitude",
+    "save": "Salvar tática",
+    "saved": "Tática salva"
+  },
+  "transfers": {
+    "title": "Transferências",
+    "subtitle": "Mercado server-side. Joke brands only nos patrocínios.",
+    "buy": "Contratar"
+  },
+  "training": {
+    "title": "Treinamento & Base",
+    "subtitle": "Promova joias da base.",
+    "youth": "Academia",
+    "promote": "Promover",
+    "noYouth": "Sem jogadores na base — termine a temporada.",
+    "focus": "Foco semanal",
+    "focusHint": "Foco influencia moral no próximo ciclo de atributos.",
+    "promoted": "Promovido ao elenco!"
+  },
+  "stadium": {
+    "title": "Estádio",
+    "level": "Nível"
+  },
+  "cup": {
+    "title": "Copa",
+    "sim": "Simular",
+    "empty": "Sem chave ainda — encerre a temporada."
+  },
+  "patches": {
+    "title": "Patches",
+    "subtitle": "Conteúdo opt-in.",
+    "install": "Instalar",
+    "installed": "Instalado"
   }
 }

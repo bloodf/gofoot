@@ -18,6 +18,7 @@
     "check:brands": "tsx scripts/check-brands.ts",
     "check:attribution": "tsx scripts/check-attribution.ts",
     "fetch:assets": "tsx scripts/fetch-assets.ts",
+    "seed:refresh": "tsx scripts/seed-refresh.ts",
     "lint": "eslint .",
     "format": "prettier --write ."
   },

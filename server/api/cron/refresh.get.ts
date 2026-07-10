@@ -20,7 +20,7 @@ export default defineEventHandler(async (event) => {
     sql: `INSERT INTO refresh_state (job_name, last_run_at, last_status, meta_json)
       VALUES ('web_refresh', ?, 'ok', ?)
       ON CONFLICT(job_name) DO UPDATE SET last_run_at=excluded.last_run_at, last_status=excluded.last_status, meta_json=excluded.meta_json`,
-    args: [now, JSON.stringify({ note: 'stub — seed data is local' })],
+    args: [now, JSON.stringify({ note: 'local seed refresh heartbeat', source: 'seed-index' })],
   })
   await db.execute({
     sql: `INSERT INTO web_cache (cache_key, payload_json, fetched_at, expires_at)
